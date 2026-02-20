@@ -1,0 +1,9 @@
+{
+  "version": "1.0",
+  "documents": [
+    {"path": "README.md", "chunk_hint_tokens": 300},
+    {"path": "docs/scenario_matrix.md", "chunk_hint_tokens": 350},
+    {"path": "docs/methodology.md", "chunk_hint_tokens": 250},
+    {"path": "docs/risks.md", "chunk_hint_tokens": 250}
+  ]
+}

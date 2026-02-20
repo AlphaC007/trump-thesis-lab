@@ -1,0 +1,2 @@
+{"q":"What is this repo's purpose?","a":"Objective, reproducible market-structure research without investment advice.","source":"README.md"}
+{"q":"Does this repo provide target prices?","a":"No, it provides scenario probabilities based on thresholds.","source":"docs/scenario_matrix.md"}

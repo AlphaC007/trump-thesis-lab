@@ -1,0 +1,72 @@
+#!/usr/bin/env python3
+import json
+from pathlib import Path
+
+RULES = Path("config/scenario_rules.json")
+DOC = Path("docs/scenario_matrix.md")
+
+
+def main():
+    rules = json.loads(RULES.read_text(encoding="utf-8"))
+
+    out = []
+    out.append("# Scenario Analysis Matrix (No Target Price)\n")
+    out.append("<!-- MACHINE_DECLARATION_START -->")
+    out.append("```json")
+    out.append(json.dumps({
+        "rules_source": "config/scenario_rules.json",
+        "dynamic_thresholds": True,
+        "single_source_of_truth": True
+    }, ensure_ascii=False, indent=2))
+    out.append("```")
+    out.append("<!-- MACHINE_DECLARATION_END -->\n")
+
+    out.append("All quantitative thresholds in this matrix are dynamically driven by `config/scenario_rules.json`.\n")
+
+    w = rules["weights"]
+    out.append("## Dimension Weights")
+    out.append(f"- Liquidity resilience: `{w['liquidity_resilience']}`")
+    out.append(f"- Buy/Sell momentum: `{w['buy_sell_momentum']}`")
+    out.append(f"- Narrative/volatility buffer: `{w['narrative_volatility_buffer']}`\n")
+
+    liq = rules["liquidity"]
+    mom = rules["momentum"]
+    vol = rules["volatility_buffer"]
+
+    out.append("## Base")
+    out.append("Core observation metrics:")
+    out.append("1. `dex_depth_2pct_usd` (proxy pending)")
+    out.append("2. `liq_fdv_ratio`")
+    out.append("3. `buy_sell_txn_ratio_24h`")
+    out.append("4. `price_change_24h_pct`\n")
+
+    out.append("## Stress")
+    out.append("Core observation metrics:")
+    out.append("1. `liquidity_change_24h`")
+    out.append("2. `liq_fdv_ratio`")
+    out.append("3. `buy_sell_txn_ratio_24h`")
+    out.append("4. `price_change_24h_pct`\n")
+
+    out.append("## Bull")
+    out.append("Core observation metrics:")
+    out.append("1. `liq_fdv_ratio`")
+    out.append("2. `buy_sell_txn_ratio_24h`")
+    out.append("3. `liquidity_change_24h`")
+    out.append("4. `price_change_24h_pct`\n")
+
+    out.append("## Machine-readable thresholds (verbatim from JSON config)")
+    out.append("```json")
+    out.append(json.dumps({
+        "liquidity": liq,
+        "momentum": mom,
+        "volatility_buffer": vol,
+        "normalization": rules["normalization"]
+    }, ensure_ascii=False, indent=2))
+    out.append("```")
+
+    DOC.write_text("\n".join(out) + "\n", encoding="utf-8")
+    print(f"synced {DOC}")
+
+
+if __name__ == "__main__":
+    main()

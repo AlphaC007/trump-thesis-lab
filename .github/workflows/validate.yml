@@ -1,0 +1,30 @@
+name: validate-structure
+on: [push, pull_request]
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Install validation deps
+        run: |
+          python -m pip install --upgrade pip
+          pip install jsonschema
+
+      - name: Check key files
+        run: |
+          test -f README.md
+          test -f docs/scenario_matrix.md
+          test -f rag/corpus_manifest.json
+          test -f config/scenario_rules.json
+          test -f config/scenario_schema.json
+
+      - name: Validate scenario rules (schema + hard assertions)
+        run: |
+          python scripts/validate_rules.py

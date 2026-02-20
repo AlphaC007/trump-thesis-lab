@@ -1,0 +1,167 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.com/trump-thesis-lab/scenario_schema.json",
+  "title": "Scenario Rules Schema",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "version",
+    "rules_source",
+    "weights",
+    "liquidity",
+    "momentum",
+    "volatility_buffer",
+    "normalization"
+  ],
+  "properties": {
+    "version": { "type": "string", "minLength": 1 },
+    "rules_source": { "type": "string", "const": "config/scenario_rules.json" },
+    "weights": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["liquidity_resilience", "buy_sell_momentum", "narrative_volatility_buffer"],
+      "properties": {
+        "liquidity_resilience": { "type": "number", "minimum": 0, "maximum": 1 },
+        "buy_sell_momentum": { "type": "number", "minimum": 0, "maximum": 1 },
+        "narrative_volatility_buffer": { "type": "number", "minimum": 0, "maximum": 1 }
+      }
+    },
+    "liquidity": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["stress_drop_24h_threshold", "liq_fdv_bands", "allocations"],
+      "properties": {
+        "stress_drop_24h_threshold": { "type": "number", "minimum": -1, "maximum": 0 },
+        "liq_fdv_bands": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["healthy_min", "neutral_min"],
+          "properties": {
+            "healthy_min": { "type": "number", "minimum": 0, "maximum": 1 },
+            "neutral_min": { "type": "number", "minimum": 0, "maximum": 1 }
+          }
+        },
+        "allocations": { "$ref": "#/$defs/liquidityAllocations" }
+      }
+    },
+    "momentum": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["bull_min_ratio", "stress_max_ratio", "strength_scales", "allocations"],
+      "properties": {
+        "bull_min_ratio": { "type": "number", "minimum": 0 },
+        "stress_max_ratio": { "type": "number", "minimum": 0 },
+        "strength_scales": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["bull_denominator", "stress_denominator"],
+          "properties": {
+            "bull_denominator": { "type": "number", "exclusiveMinimum": 0 },
+            "stress_denominator": { "type": "number", "exclusiveMinimum": 0 }
+          }
+        },
+        "allocations": { "$ref": "#/$defs/momentumAllocations" }
+      }
+    },
+    "volatility_buffer": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["bands_abs_pct", "allocations"],
+      "properties": {
+        "bands_abs_pct": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["low_max", "mid_max"],
+          "properties": {
+            "low_max": { "type": "number", "minimum": 0 },
+            "mid_max": { "type": "number", "minimum": 0 }
+          }
+        },
+        "allocations": { "$ref": "#/$defs/volAllocations" }
+      }
+    },
+    "normalization": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["cap_total_probability", "renormalize_after_updates", "round_digits", "correction_target"],
+      "properties": {
+        "cap_total_probability": { "type": "number", "const": 1.0 },
+        "renormalize_after_updates": { "type": "boolean" },
+        "round_digits": { "type": "integer", "minimum": 0, "maximum": 8 },
+        "correction_target": { "type": "string", "enum": ["Bull", "Base", "Stress"] }
+      }
+    }
+  },
+  "$defs": {
+    "tripleAlloc": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["bull", "base", "stress"],
+      "properties": {
+        "bull": { "type": "number", "minimum": 0, "maximum": 1 },
+        "base": { "type": "number", "minimum": 0, "maximum": 1 },
+        "stress": { "type": "number", "minimum": 0, "maximum": 1 }
+      }
+    },
+    "liquidityAllocations": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["hard_stress_trigger", "healthy", "neutral", "fragile", "fallback"],
+      "properties": {
+        "hard_stress_trigger": { "$ref": "#/$defs/tripleAlloc" },
+        "healthy": { "$ref": "#/$defs/tripleAlloc" },
+        "neutral": { "$ref": "#/$defs/tripleAlloc" },
+        "fragile": { "$ref": "#/$defs/tripleAlloc" },
+        "fallback": { "$ref": "#/$defs/tripleAlloc" }
+      }
+    },
+    "momentumBull": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["bull_base", "bull_bonus", "base_base", "base_penalty", "stress_base", "stress_penalty"],
+      "properties": {
+        "bull_base": { "type": "number", "minimum": 0, "maximum": 1 },
+        "bull_bonus": { "type": "number", "minimum": 0, "maximum": 1 },
+        "base_base": { "type": "number", "minimum": 0, "maximum": 1 },
+        "base_penalty": { "type": "number", "minimum": 0, "maximum": 1 },
+        "stress_base": { "type": "number", "minimum": 0, "maximum": 1 },
+        "stress_penalty": { "type": "number", "minimum": 0, "maximum": 1 }
+      }
+    },
+    "momentumStress": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["stress_base", "stress_bonus", "base_base", "base_penalty", "bull_base", "bull_penalty"],
+      "properties": {
+        "stress_base": { "type": "number", "minimum": 0, "maximum": 1 },
+        "stress_bonus": { "type": "number", "minimum": 0, "maximum": 1 },
+        "base_base": { "type": "number", "minimum": 0, "maximum": 1 },
+        "base_penalty": { "type": "number", "minimum": 0, "maximum": 1 },
+        "bull_base": { "type": "number", "minimum": 0, "maximum": 1 },
+        "bull_penalty": { "type": "number", "minimum": 0, "maximum": 1 }
+      }
+    },
+    "momentumAllocations": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["bull_trend", "stress_trend", "neutral", "fallback"],
+      "properties": {
+        "bull_trend": { "$ref": "#/$defs/momentumBull" },
+        "stress_trend": { "$ref": "#/$defs/momentumStress" },
+        "neutral": { "$ref": "#/$defs/tripleAlloc" },
+        "fallback": { "$ref": "#/$defs/tripleAlloc" }
+      }
+    },
+    "volAllocations": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["low", "mid", "high", "fallback"],
+      "properties": {
+        "low": { "$ref": "#/$defs/tripleAlloc" },
+        "mid": { "$ref": "#/$defs/tripleAlloc" },
+        "high": { "$ref": "#/$defs/tripleAlloc" },
+        "fallback": { "$ref": "#/$defs/tripleAlloc" }
+      }
+    }
+  }
+}

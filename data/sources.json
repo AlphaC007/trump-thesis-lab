@@ -1,0 +1,16 @@
+{
+  "sources": [
+    {
+      "id": "coingecko",
+      "type": "market",
+      "url": "https://api.coingecko.com/api/v3/",
+      "trust_tier": "A"
+    },
+    {
+      "id": "dexscreener",
+      "type": "dex",
+      "url": "https://api.dexscreener.com/latest/dex/tokens/",
+      "trust_tier": "A"
+    }
+  ]
+}
