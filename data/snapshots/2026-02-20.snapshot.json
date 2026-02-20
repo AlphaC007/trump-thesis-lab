@@ -1,15 +1,15 @@
 {
-  "as_of_utc": "2026-02-20T11:59:46Z",
+  "as_of_utc": "2026-02-20T12:00:20Z",
   "asset": "TRUMP",
   "market": {
     "price_usd": 3.73,
     "mcap_usd": 865960865.2477449,
-    "volume_24h_usd": 191365074.54610655,
-    "liquidity_usd": 30756628.71,
-    "fdv_usd": 3718563432.0,
+    "volume_24h_usd": 191819398.8607913,
+    "liquidity_usd": 30703204.15,
+    "fdv_usd": 3711020710.0,
     "buys_24h": 3320.0,
-    "sells_24h": 2907.0,
-    "buy_sell_txn_ratio_24h": 1.1421
+    "sells_24h": 2916.0,
+    "buy_sell_txn_ratio_24h": 1.1385
   },
   "onchain": {
     "top10_holder_pct": null,
@@ -19,13 +19,13 @@
     "exchange_outflow_usd_24h": null
   },
   "derived": {
-    "liq_fdv_ratio": 0.008271,
+    "liq_fdv_ratio": 0.008274,
     "liquidity_change_24h": null,
-    "price_change_24h_pct": 8.98
+    "price_change_24h_pct": 8.75
   },
   "scenario_probabilities": {
-    "Bull": 0.455,
-    "Base": 0.4228,
+    "Bull": 0.4547,
+    "Base": 0.4231,
     "Stress": 0.1222
   },
   "risk_flags": [
