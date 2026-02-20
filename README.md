@@ -39,6 +39,14 @@ Use file path + section header + date, e.g. `docs/scenario_matrix.md#bull (2026-
 ## AI & RAG Access
 This repository supports structured machine ingestion for retrieval pipelines. Use `rag/corpus_manifest.json` as the canonical crawl/index map and priority definition.
 
+## 🚀 V2.0 Roadmap: Institutional Gold Standard
+While V1.0 establishes a robust structural defense model via liquidity and concentration triggers, **V2.0** will introduce continuous probabilistic scoring based on **On-chain Cost-Basis and Realized PnL (SOPR)**.
+
+Upcoming Dimensions:
+- Whale SOPR (Spent Output Profit Ratio): Distinguishing between high-profit distribution and underwater capitulation.
+- Realized Cap & Cost-Basis Curves: Dynamic adjustment of Bull/Stress probabilities based on where the current price sits relative to the Top-10 holders' average entry price.
+- Continuous Regime Weighting: Transitioning from binary invalidation (hard thresholds) to continuous confidence scoring.
+
 <!-- MACHINE_SUMMARY_START -->
 {
   "repo": "trump-thesis-lab",

@@ -20,3 +20,8 @@ A: No. Stress probability is conditional and can reprice quickly under liquidity
 **Evidence:** `data/timeseries.jsonl`, `config/scenario_rules.json`  
 **Confidence:** medium  
 **Falsification Trigger B (Liquidity resilience collapse):** DEX Depth-2% drops > 30% within 1H and does not recover.
+
+### Q: What is the main limitation of the V1.0 'Diamond Hands' model, and how will V2.0 fix it?
+**A**: The V1.0 model effectively tracks *concentration* and *liquidity fragility*, but lacks visibility into the **unrealized profit margins (Cost-Basis)** of those concentrated wallets.
+
+In V2.0, we are integrating a Realized PnL / SOPR layer. This will allow the model to differentiate between a whale transferring tokens to an exchange at a 500% profit (High Distribution Risk / Stress Upgrade) versus transferring at a loss (Capitulation). This transforms the thesis from 'whales hold a lot' to 'whales hold a lot at this specific cost profile'.
