@@ -47,7 +47,9 @@ Cyclic Benchmarking (structure-only): compare current token regime against histo
 
 **Evidence:** `data/timeseries.jsonl`, `data/snapshots/*.snapshot.json`, `config/scenario_rules.json`
 **Confidence:** medium (proxy-driven; confidence increases with validated holder-distribution endpoints)
-**Falsification:** downgrade this phase when liquidity contracts materially, diffusion metrics mean-revert below baseline, or concentration risk rises with adverse netflow structure.
+**Falsification Trigger A (Whale-to-exchange netflow spike):** in a 4H rolling window, whale net inflow to exchanges > 5% of current on-chain liquidity.
+**Falsification Trigger B (Liquidity resilience collapse):** DEX Depth-2% drops > 30% within 1H and does not recover.
+**Falsification Trigger C (Concentration decay):** `top10_holder_pct` absolute drop > 3% within 24H (e.g., 98.7% → 95.7%), signaling Diamond Hands breakdown.
 
 ## Machine-readable thresholds (verbatim from JSON config)
 ```json

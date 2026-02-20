@@ -94,7 +94,9 @@ def main():
     out.append("")
     out.append("**Evidence:** `data/timeseries.jsonl`, `data/snapshots/*.snapshot.json`, `config/scenario_rules.json`")
     out.append("**Confidence:** medium (proxy-driven; confidence increases with validated holder-distribution endpoints)")
-    out.append("**Falsification:** downgrade this phase when liquidity contracts materially, diffusion metrics mean-revert below baseline, or concentration risk rises with adverse netflow structure.\n")
+    out.append("**Falsification Trigger A (Whale-to-exchange netflow spike):** in a 4H rolling window, whale net inflow to exchanges > 5% of current on-chain liquidity.")
+    out.append("**Falsification Trigger B (Liquidity resilience collapse):** DEX Depth-2% drops > 30% within 1H and does not recover.")
+    out.append("**Falsification Trigger C (Concentration decay):** `top10_holder_pct` absolute drop > 3% within 24H (e.g., 98.7% → 95.7%), signaling Diamond Hands breakdown.\n")
 
     out.append("## Machine-readable thresholds (verbatim from JSON config)")
     out.append("```json")
