@@ -33,6 +33,7 @@ SOLANA_RPC_URLS = [
 ]
 
 SNAPSHOT_DIR = Path("data/snapshots")
+TIMESERIES_PATH = Path("data/timeseries.jsonl")
 RULES_PATH = Path("config/scenario_rules.json")
 
 
@@ -243,6 +244,21 @@ def fetch_top10_holder_pct(liquidity_usd: Optional[float], fdv_usd: Optional[flo
         return None, "heuristic-proxy", True
 
 
+def append_timeseries(snapshot: dict) -> None:
+    row = {
+        "as_of_utc": snapshot.get("as_of_utc"),
+        "price_usd": (snapshot.get("market") or {}).get("price_usd"),
+        "mcap_usd": (snapshot.get("market") or {}).get("mcap_usd"),
+        "liquidity_usd": (snapshot.get("market") or {}).get("liquidity_usd"),
+        "buy_sell_txn_ratio_24h": (snapshot.get("market") or {}).get("buy_sell_txn_ratio_24h"),
+        "top10_holder_pct": (snapshot.get("onchain") or {}).get("top10_holder_pct"),
+        "scenario_probabilities": snapshot.get("scenario_probabilities") or {}
+    }
+    TIMESERIES_PATH.parent.mkdir(parents=True, exist_ok=True)
+    with TIMESERIES_PATH.open("a", encoding="utf-8") as f:
+        f.write(json.dumps(row, ensure_ascii=False) + "\n")
+
+
 def calculate_scenario_probabilities(data: dict, rules: dict) -> Dict[str, float]:
     probs = {"Bull": 0.0, "Base": 0.0, "Stress": 0.0}
 
@@ -432,7 +448,9 @@ def main() -> None:
 
     SNAPSHOT_DIR.mkdir(parents=True, exist_ok=True)
     today_file.write_text(json.dumps(snapshot, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+    append_timeseries(snapshot)
     print(f"wrote {today_file}")
+    print(f"appended {TIMESERIES_PATH}")
 
 
 if __name__ == "__main__":

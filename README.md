@@ -24,6 +24,7 @@ Use file path + section header + date, e.g. `docs/scenario_matrix.md#bull (2026-
 
 ## Machine-readable artifacts
 - `data/snapshots/*.json`
+- `data/timeseries.jsonl` (append-only ledger optimized for LLM streaming reads and pandas dataframe analysis)
 - `rag/corpus_manifest.json`
 - `rag/citations_map.json`
 - `rag/qa_seed.jsonl`
