@@ -23,7 +23,10 @@ jobs:
         run: |
           python scripts/sync_docs.py
 
-      - name: Build snapshot (CoinGecko + DexScreener)
+      - name: Build snapshot (CoinGecko + DexScreener + On-chain holders)
+        env:
+          MORALIS_API_KEY: ${{ secrets.MORALIS_API_KEY }}
+          SOLSCAN_API_KEY: ${{ secrets.SOLSCAN_API_KEY }}
         run: |
           python scripts/build_snapshot.py
 

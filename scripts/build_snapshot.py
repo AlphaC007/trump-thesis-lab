@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 import datetime as dt
 import json
+import os
 import urllib.request
 from pathlib import Path
 from typing import Dict, Optional
@@ -11,13 +12,24 @@ COINGECKO_URL = (
     "&include_market_cap=true&include_24hr_vol=true"
 )
 DEXSCREENER_URL = "https://api.dexscreener.com/latest/dex/tokens/6p6xgHyF7AeE6TZkSmFsko444wqoP15icUSqi2jfGiPN"
+SOL_TOKEN_ADDRESS = "6p6xgHyF7AeE6TZkSmFsko444wqoP15icUSqi2jfGiPN"
+# Moralis (preferred if MORALIS_API_KEY is set)
+MORALIS_HOLDERS_URL = f"https://solana-gateway.moralis.io/token/mainnet/{SOL_TOKEN_ADDRESS}/holders"
+MORALIS_META_URL = f"https://solana-gateway.moralis.io/token/mainnet/{SOL_TOKEN_ADDRESS}/metadata"
+
+# Solscan fallback
+SOLSCAN_HOLDERS_URL = f"https://pro-api.solscan.io/v2.0/token/holders?address={SOL_TOKEN_ADDRESS}&page=1&page_size=10"
+SOLSCAN_META_URL = f"https://pro-api.solscan.io/v2.0/token/meta?address={SOL_TOKEN_ADDRESS}"
 
 SNAPSHOT_DIR = Path("data/snapshots")
 RULES_PATH = Path("config/scenario_rules.json")
 
 
-def fetch_json(url: str) -> dict:
-    req = urllib.request.Request(url, headers={"User-Agent": "trump-thesis-lab/3.0"})
+def fetch_json(url: str, headers: Optional[dict] = None) -> dict:
+    req_headers = {"User-Agent": "trump-thesis-lab/3.1"}
+    if headers:
+        req_headers.update(headers)
+    req = urllib.request.Request(url, headers=req_headers)
     with urllib.request.urlopen(req, timeout=25) as r:
         return json.loads(r.read().decode("utf-8"))
 
@@ -64,13 +76,77 @@ def add_alloc(target: Dict[str, float], alloc: Dict[str, float]) -> None:
     target["Stress"] += float(alloc.get("stress", 0.0))
 
 
+def _compute_top10_pct(holders: list, total_supply: Optional[float], decimals: Optional[float], amount_key: str) -> Optional[float]:
+    if total_supply is None or total_supply == 0 or decimals is None:
+        return None
+    scale = 10 ** int(decimals)
+    top_sum = 0.0
+    for h in holders[:10]:
+        amt = to_float(h.get(amount_key))
+        if amt is not None:
+            top_sum += amt
+    total_supply_units = total_supply / scale
+    if total_supply_units <= 0:
+        return None
+    pct = (top_sum / scale) / total_supply_units * 100.0
+    return round(pct, 4)
+
+
+def fetch_top10_holder_pct() -> tuple[Optional[float], str]:
+    """
+    Returns (top10_holder_pct, source_id).
+    Priority:
+      1) Moralis (if MORALIS_API_KEY present)
+      2) Solscan fallback
+    """
+    # 1) Moralis path
+    moralis_key = os.getenv("MORALIS_API_KEY")
+    if moralis_key:
+        try:
+            headers = {"X-API-Key": moralis_key}
+            holders_resp = fetch_json(MORALIS_HOLDERS_URL, headers=headers)
+            meta_resp = fetch_json(MORALIS_META_URL, headers=headers)
+
+            holders = holders_resp.get("result", []) if isinstance(holders_resp, dict) else []
+            # Moralis supply/decimals fields can vary by plan/version; handle common keys.
+            decimals = to_float(meta_resp.get("decimals") or (meta_resp.get("result") or {}).get("decimals"))
+            total_supply = to_float(
+                meta_resp.get("totalSupply")
+                or meta_resp.get("total_supply")
+                or (meta_resp.get("result") or {}).get("totalSupply")
+                or (meta_resp.get("result") or {}).get("total_supply")
+            )
+
+            pct = _compute_top10_pct(holders, total_supply, decimals, amount_key="amount")
+            if pct is not None:
+                return pct, "moralis"
+        except Exception:
+            pass
+
+    # 2) Solscan fallback
+    try:
+        api_key = os.getenv("SOLSCAN_API_KEY")
+        headers = {"token": api_key} if api_key else {}
+
+        holders_resp = fetch_json(SOLSCAN_HOLDERS_URL, headers=headers)
+        meta_resp = fetch_json(SOLSCAN_META_URL, headers=headers)
+
+        holders = holders_resp.get("data", []) if isinstance(holders_resp, dict) else []
+        meta_data = meta_resp.get("data", {}) if isinstance(meta_resp, dict) else {}
+        decimals = to_float(meta_data.get("decimals"))
+        total_supply = to_float(meta_data.get("supply"))
+
+        pct = _compute_top10_pct(holders, total_supply, decimals, amount_key="amount")
+        return (pct, "solscan") if pct is not None else (None, "solscan")
+    except Exception:
+        return None, "solscan"
+
+
 def calculate_scenario_probabilities(data: dict, rules: dict) -> Dict[str, float]:
     probs = {"Bull": 0.0, "Base": 0.0, "Stress": 0.0}
 
-    # 1) Liquidity resilience
     liq_cfg = rules["liquidity"]
     liq_alloc = liq_cfg["allocations"]
-
     liq_fdv_ratio = to_float(data["derived"].get("liq_fdv_ratio"))
     liq_change_24h = to_float(data["derived"].get("liquidity_change_24h"))
 
@@ -89,7 +165,6 @@ def calculate_scenario_probabilities(data: dict, rules: dict) -> Dict[str, float
         else:
             add_alloc(probs, liq_alloc["fragile"])
 
-    # 2) Buy/Sell momentum
     mom_cfg = rules["momentum"]
     mom_alloc = mom_cfg["allocations"]
 
@@ -116,7 +191,6 @@ def calculate_scenario_probabilities(data: dict, rules: dict) -> Dict[str, float
     else:
         add_alloc(probs, mom_alloc["neutral"])
 
-    # 3) Narrative/volatility buffer
     vol_cfg = rules["volatility_buffer"]
     vol_alloc = vol_cfg["allocations"]
     price_change_24h_pct = to_float(data["derived"].get("price_change_24h_pct"))
@@ -134,7 +208,6 @@ def calculate_scenario_probabilities(data: dict, rules: dict) -> Dict[str, float
         else:
             add_alloc(probs, vol_alloc["high"])
 
-    # normalize
     total = sum(probs.values())
     if total <= 0:
         return {"Bull": 0.33, "Base": 0.34, "Stress": 0.33}
@@ -188,6 +261,8 @@ def main() -> None:
     if liquidity_usd is not None and fdv_usd not in (None, 0):
         liq_fdv_ratio = liquidity_usd / fdv_usd
 
+    top10_holder_pct, holder_source = fetch_top10_holder_pct()
+
     snapshot = {
         "as_of_utc": as_of,
         "asset": "TRUMP",
@@ -202,7 +277,8 @@ def main() -> None:
             "buy_sell_txn_ratio_24h": round(buy_sell_ratio_24h, 4) if buy_sell_ratio_24h is not None else None
         },
         "onchain": {
-            "top10_holder_pct": None,
+            "top10_holder_pct": top10_holder_pct,
+            "top10_holder_source": holder_source,
             "dex_depth_2pct_usd": None,
             "exchange_inflow_usd_24h": None,
             "exchange_outflow_usd_24h": None
@@ -214,13 +290,21 @@ def main() -> None:
         },
         "scenario_probabilities": {},
         "risk_flags": [],
-        "sources": ["coingecko", "dexscreener"],
+        "sources": ["coingecko", "dexscreener", "moralis" if holder_source == "moralis" else "solscan"],
         "model": {
             "name": "scenario_prob_v1",
             "rules_source": str(RULES_PATH),
             "weights": rules.get("weights", {})
         }
     }
+
+    if top10_holder_pct is None:
+        snapshot["risk_flags"].append({
+            "id": "onchain_top10_unavailable",
+            "triggered": True,
+            "severity": "low",
+            "evidence": ["source:solscan"]
+        })
 
     snapshot["scenario_probabilities"] = calculate_scenario_probabilities(snapshot, rules)
 

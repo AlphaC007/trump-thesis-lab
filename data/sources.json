@@ -11,6 +11,12 @@
       "type": "dex",
       "url": "https://api.dexscreener.com/latest/dex/tokens/",
       "trust_tier": "A"
+    },
+    {
+      "id": "solscan",
+      "type": "onchain",
+      "url": "https://pro-api.solscan.io/v2.0/",
+      "trust_tier": "A"
     }
   ]
 }
