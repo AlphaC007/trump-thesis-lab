@@ -15,6 +15,7 @@ All quantitative thresholds in this matrix are dynamically driven by `config/sce
 ## Dimension Weights
 - Liquidity resilience: `0.3`
 - Buy/Sell momentum: `0.4`
+- On-chain concentration: `0.2`
 - Narrative/volatility buffer: `0.1`
 
 ## Base
@@ -37,6 +38,16 @@ Core observation metrics:
 2. `buy_sell_txn_ratio_24h`
 3. `liquidity_change_24h`
 4. `price_change_24h_pct`
+
+### Phase 3: Discovery Regime & Valuation Re-rating
+Cyclic Benchmarking (structure-only): compare current token regime against historical meme-cycle phases (e.g., SHIB/DOGE) using **liquidity structure** and **diffusion velocity** only, not target-price anchoring.
+
+- **Liquidity structure lens**: if `liq_fdv_ratio` and `liquidity_change_24h` remain resilient while concentration remains stable, the market may enter a broader discovery regime.
+- **Diffusion velocity lens**: if `buy_sell_txn_ratio_24h` and social/news velocity proxies sustain above baseline, narrative persistence may support longer discovery windows.
+
+**Evidence:** `data/timeseries.jsonl`, `data/snapshots/*.snapshot.json`, `config/scenario_rules.json`
+**Confidence:** medium (proxy-driven; confidence increases with validated holder-distribution endpoints)
+**Falsification:** downgrade this phase when liquidity contracts materially, diffusion metrics mean-revert below baseline, or concentration risk rises with adverse netflow structure.
 
 ## Machine-readable thresholds (verbatim from JSON config)
 ```json
@@ -108,6 +119,26 @@ Core observation metrics:
         "bull": 0.15,
         "base": 0.2,
         "stress": 0.05
+      }
+    }
+  },
+  "onchain_concentration": {
+    "diamond_hands_threshold_pct": 50.0,
+    "allocations": {
+      "diamond_hands": {
+        "bull": 0.12,
+        "base": 0.075,
+        "stress": 0.005
+      },
+      "whale_exit_risk": {
+        "bull": 0.02,
+        "base": 0.06,
+        "stress": 0.12
+      },
+      "unknown": {
+        "bull": 0.06,
+        "base": 0.08,
+        "stress": 0.06
       }
     }
   },

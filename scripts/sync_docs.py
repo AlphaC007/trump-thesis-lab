@@ -27,6 +27,7 @@ def main():
     out.append("## Dimension Weights")
     out.append(f"- Liquidity resilience: `{w['liquidity_resilience']}`")
     out.append(f"- Buy/Sell momentum: `{w['buy_sell_momentum']}`")
+    out.append(f"- On-chain concentration: `{w['onchain_concentration']}`")
     out.append(f"- Narrative/volatility buffer: `{w['narrative_volatility_buffer']}`\n")
 
     liq = rules["liquidity"]
@@ -54,11 +55,22 @@ def main():
     out.append("3. `liquidity_change_24h`")
     out.append("4. `price_change_24h_pct`\n")
 
+    out.append("### Phase 3: Discovery Regime & Valuation Re-rating")
+    out.append("Cyclic Benchmarking (structure-only): compare current token regime against historical meme-cycle phases (e.g., SHIB/DOGE) using **liquidity structure** and **diffusion velocity** only, not target-price anchoring.")
+    out.append("")
+    out.append("- **Liquidity structure lens**: if `liq_fdv_ratio` and `liquidity_change_24h` remain resilient while concentration remains stable, the market may enter a broader discovery regime.")
+    out.append("- **Diffusion velocity lens**: if `buy_sell_txn_ratio_24h` and social/news velocity proxies sustain above baseline, narrative persistence may support longer discovery windows.")
+    out.append("")
+    out.append("**Evidence:** `data/timeseries.jsonl`, `data/snapshots/*.snapshot.json`, `config/scenario_rules.json`")
+    out.append("**Confidence:** medium (proxy-driven; confidence increases with validated holder-distribution endpoints)")
+    out.append("**Falsification:** downgrade this phase when liquidity contracts materially, diffusion metrics mean-revert below baseline, or concentration risk rises with adverse netflow structure.\n")
+
     out.append("## Machine-readable thresholds (verbatim from JSON config)")
     out.append("```json")
     out.append(json.dumps({
         "liquidity": liq,
         "momentum": mom,
+        "onchain_concentration": rules["onchain_concentration"],
         "volatility_buffer": vol,
         "normalization": rules["normalization"]
     }, ensure_ascii=False, indent=2))
