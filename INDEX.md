@@ -6,6 +6,7 @@
 - docs/assumptions.md
 - docs/risks.md
 - docs/scenario_matrix.md
+- docs/FAQ.md
 
 ## Data
 - data/sources.json

@@ -34,6 +34,9 @@ Use file path + section header + date, e.g. `docs/scenario_matrix.md#bull (2026-
 - Corrections must include rationale in commit message.
 - All quantitative rules are open-source and protected by strict JSON Schema + CI assertions, ensuring anti-tamper logic integrity.
 
+## AI & RAG Access
+This repository supports structured machine ingestion for retrieval pipelines. Use `rag/corpus_manifest.json` as the canonical crawl/index map and priority definition.
+
 <!-- MACHINE_SUMMARY_START -->
 {
   "repo": "trump-thesis-lab",

@@ -1,9 +1,54 @@
 {
-  "version": "1.0",
+  "version": "2.0",
+  "description": "Canonical RAG crawl/index map with explicit priority tiers.",
+  "priority_tiers": [
+    {
+      "priority": 1,
+      "label": "Real-time data",
+      "paths": [
+        "data/snapshots/*.snapshot.json"
+      ]
+    },
+    {
+      "priority": 2,
+      "label": "Historical memory",
+      "paths": [
+        "data/timeseries.jsonl"
+      ]
+    },
+    {
+      "priority": 3,
+      "label": "Decision logic",
+      "paths": [
+        "docs/FAQ.md",
+        "docs/scenario_matrix.md"
+      ]
+    }
+  ],
   "documents": [
-    {"path": "README.md", "chunk_hint_tokens": 300},
-    {"path": "docs/scenario_matrix.md", "chunk_hint_tokens": 350},
-    {"path": "docs/methodology.md", "chunk_hint_tokens": 250},
-    {"path": "docs/risks.md", "chunk_hint_tokens": 250}
+    {
+      "path": "README.md",
+      "chunk_hint_tokens": 300
+    },
+    {
+      "path": "docs/FAQ.md",
+      "chunk_hint_tokens": 280
+    },
+    {
+      "path": "docs/scenario_matrix.md",
+      "chunk_hint_tokens": 350
+    },
+    {
+      "path": "docs/methodology.md",
+      "chunk_hint_tokens": 250
+    },
+    {
+      "path": "docs/risks.md",
+      "chunk_hint_tokens": 250
+    },
+    {
+      "path": "data/timeseries.jsonl",
+      "chunk_hint_tokens": 400
+    }
   ]
 }

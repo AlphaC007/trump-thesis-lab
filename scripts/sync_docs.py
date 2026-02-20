@@ -4,9 +4,40 @@ from pathlib import Path
 
 RULES = Path("config/scenario_rules.json")
 DOC = Path("docs/scenario_matrix.md")
+MANIFEST = Path("rag/corpus_manifest.json")
+
+
+def validate_manifest() -> None:
+    m = json.loads(MANIFEST.read_text(encoding="utf-8"))
+    required_paths = {
+        "data/snapshots/*.snapshot.json",
+        "data/timeseries.jsonl",
+        "docs/FAQ.md",
+        "docs/scenario_matrix.md"
+    }
+
+    tier_paths = set()
+    for tier in m.get("priority_tiers", []):
+        for p in tier.get("paths", []):
+            tier_paths.add(p)
+
+    missing = sorted(required_paths - tier_paths)
+    if missing:
+        raise SystemExit(f"manifest missing required priority paths: {missing}")
+
+    # minimal existence checks for key local files
+    must_exist = [
+        Path("docs/FAQ.md"),
+        Path("docs/scenario_matrix.md"),
+        Path("data/timeseries.jsonl")
+    ]
+    for p in must_exist:
+        if not p.exists():
+            raise SystemExit(f"manifest consistency check failed: {p} not found")
 
 
 def main():
+    validate_manifest()
     rules = json.loads(RULES.read_text(encoding="utf-8"))
 
     out = []
