@@ -1,32 +1,32 @@
 {
-  "as_of_utc": "2026-02-20T12:06:27Z",
+  "as_of_utc": "2026-02-20T12:15:28Z",
   "asset": "TRUMP",
   "market": {
-    "price_usd": 3.69,
+    "price_usd": 3.65,
     "mcap_usd": 863749349.9668455,
-    "volume_24h_usd": 209175729.6045462,
-    "liquidity_usd": 30089753.31,
-    "fdv_usd": 3629899437.0,
-    "buys_24h": 3336.0,
-    "sells_24h": 3041.0,
-    "buy_sell_txn_ratio_24h": 1.097
+    "volume_24h_usd": 208905971.8918422,
+    "liquidity_usd": 30337216.52,
+    "fdv_usd": 3662823039.0,
+    "buys_24h": 3395.0,
+    "sells_24h": 3032.0,
+    "buy_sell_txn_ratio_24h": 1.1197
   },
   "onchain": {
     "top10_holder_pct": null,
-    "top10_holder_source": "solscan",
+    "top10_holder_source": "solana-rpc",
     "dex_depth_2pct_usd": null,
     "exchange_inflow_usd_24h": null,
     "exchange_outflow_usd_24h": null
   },
   "derived": {
-    "liq_fdv_ratio": 0.008289,
+    "liq_fdv_ratio": 0.008282,
     "liquidity_change_24h": null,
-    "price_change_24h_pct": 6.48
+    "price_change_24h_pct": 7.24
   },
   "scenario_probabilities": {
-    "Bull": 0.452,
-    "Base": 0.4002,
-    "Stress": 0.1478
+    "Bull": 0.4535,
+    "Base": 0.3988,
+    "Stress": 0.1477
   },
   "risk_flags": [
     {
@@ -41,7 +41,7 @@
   "sources": [
     "coingecko",
     "dexscreener",
-    "solscan"
+    "solana-rpc"
   ],
   "model": {
     "name": "scenario_prob_v1",

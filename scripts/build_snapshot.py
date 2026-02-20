@@ -21,6 +21,13 @@ MORALIS_META_URL = f"https://solana-gateway.moralis.io/token/mainnet/{SOL_TOKEN_
 SOLSCAN_HOLDERS_URL = f"https://pro-api.solscan.io/v2.0/token/holders?address={SOL_TOKEN_ADDRESS}&page=1&page_size=10"
 SOLSCAN_META_URL = f"https://pro-api.solscan.io/v2.0/token/meta?address={SOL_TOKEN_ADDRESS}"
 
+# Public Solana RPC fallback (no API key)
+SOLANA_RPC_URLS = [
+    "https://solana-rpc.publicnode.com",
+    "https://api.mainnet-beta.solana.com",
+    "https://solana-api.projectserum.com"
+]
+
 SNAPSHOT_DIR = Path("data/snapshots")
 RULES_PATH = Path("config/scenario_rules.json")
 
@@ -92,12 +99,33 @@ def _compute_top10_pct(holders: list, total_supply: Optional[float], decimals: O
     return round(pct, 4)
 
 
+def rpc_call(method: str, params: list) -> dict:
+    payload = json.dumps({"jsonrpc": "2.0", "id": 1, "method": method, "params": params}).encode("utf-8")
+    last_err = None
+    for rpc_url in SOLANA_RPC_URLS:
+        try:
+            req = urllib.request.Request(
+                rpc_url,
+                data=payload,
+                headers={"Content-Type": "application/json", "User-Agent": "trump-thesis-lab/3.3"},
+            )
+            with urllib.request.urlopen(req, timeout=25) as r:
+                return json.loads(r.read().decode("utf-8"))
+        except Exception as e:
+            last_err = e
+            continue
+    if last_err:
+        raise last_err
+    raise RuntimeError("No Solana RPC endpoint available")
+
+
 def fetch_top10_holder_pct() -> tuple[Optional[float], str]:
     """
     Returns (top10_holder_pct, source_id).
     Priority:
-      1) Moralis (if MORALIS_API_KEY present)
-      2) Solscan fallback
+      1) Moralis (if endpoint available)
+      2) Solscan (if API tier allows)
+      3) Solana public RPC fallback
     """
     # 1) Moralis path
     moralis_key = os.getenv("MORALIS_API_KEY")
@@ -137,9 +165,34 @@ def fetch_top10_holder_pct() -> tuple[Optional[float], str]:
         total_supply = to_float(meta_data.get("supply"))
 
         pct = _compute_top10_pct(holders, total_supply, decimals, amount_key="amount")
-        return (pct, "solscan") if pct is not None else (None, "solscan")
+        if pct is not None:
+            return pct, "solscan"
     except Exception:
-        return None, "solscan"
+        pass
+
+    # 3) Solana RPC fallback (no API key needed)
+    try:
+        supply_resp = rpc_call("getTokenSupply", [SOL_TOKEN_ADDRESS])
+        supply_val = (((supply_resp.get("result") or {}).get("value") or {}))
+        decimals = to_float(supply_val.get("decimals"))
+        total_supply_ui = to_float(supply_val.get("uiAmountString") or supply_val.get("uiAmount"))
+
+        largest_resp = rpc_call("getTokenLargestAccounts", [SOL_TOKEN_ADDRESS])
+        largest = (((largest_resp.get("result") or {}).get("value") or []))
+
+        if decimals is None or total_supply_ui in (None, 0):
+            return None, "solana-rpc"
+
+        top_sum_ui = 0.0
+        for item in largest[:10]:
+            ui = to_float(item.get("uiAmountString") or item.get("uiAmount"))
+            if ui is not None:
+                top_sum_ui += ui
+
+        pct = (top_sum_ui / total_supply_ui) * 100.0
+        return round(pct, 4), "solana-rpc"
+    except Exception:
+        return None, "solana-rpc"
 
 
 def calculate_scenario_probabilities(data: dict, rules: dict) -> Dict[str, float]:
@@ -304,7 +357,7 @@ def main() -> None:
         },
         "scenario_probabilities": {},
         "risk_flags": [],
-        "sources": ["coingecko", "dexscreener", "moralis" if holder_source == "moralis" else "solscan"],
+        "sources": ["coingecko", "dexscreener", holder_source],
         "model": {
             "name": "scenario_prob_v1",
             "rules_source": str(RULES_PATH),
