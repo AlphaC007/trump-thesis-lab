@@ -1,0 +1,19 @@
+name: debug-onchain-sources
+
+on:
+  workflow_dispatch:
+
+jobs:
+  probe:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Run on-chain source diagnostics (masked)
+        env:
+          MORALIS_API_KEY: ${{ secrets.MORALIS_API_KEY }}
+          SOLSCAN_API_KEY: ${{ secrets.SOLSCAN_API_KEY }}
+        run: |
+          python scripts/debug_onchain_sources.py
