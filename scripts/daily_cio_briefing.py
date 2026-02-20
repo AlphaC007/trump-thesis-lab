@@ -9,6 +9,7 @@ import yfinance as yf
 ROOT = Path(__file__).resolve().parents[1]
 TS_PATH = ROOT / "data" / "timeseries.jsonl"
 OUT_DIR = ROOT / "reports" / "cio_briefings"
+PRIVATE_DIR = ROOT / "PRIVATE_WORKAREA" / "cio_briefings"
 
 
 def pct(v):
@@ -140,10 +141,31 @@ def main():
     md.append("## ⚠️ 5. 今日行动雷达 (Actionable Insights)")
     md.append("【CIO 深度解析区：总结 1-2 个交易风险点或高胜率埋伏方向】")
 
+    # Public report: hard data + placeholder-only analysis blocks (safe to publish)
     OUT_DIR.mkdir(parents=True, exist_ok=True)
     out = OUT_DIR / f"{date_s}-CIO-Report.md"
     out.write_text("\n".join(md) + "\n", encoding="utf-8")
     print(f"wrote {out}")
+
+    # Private report workspace: for sensitive CIO deep analysis (never committed)
+    PRIVATE_DIR.mkdir(parents=True, exist_ok=True)
+    private_out = PRIVATE_DIR / f"{date_s}-CIO-Private.md"
+    private_md = [
+        f"# 🔒 {date_s} CIO Private Strategy Notes",
+        "",
+        "## 1) 宏观与传统金融 - 深度解析",
+        "",
+        "## 2) 政治、监管与预测市场 - 深度解析",
+        "",
+        "## 3) Crypto 资金面与叙事 - 深度解析",
+        "",
+        "## 4) $TRUMP 结构评估 - 深度解析",
+        "",
+        "## 5) 今日行动雷达（敏感）",
+        "",
+    ]
+    private_out.write_text("\n".join(private_md), encoding="utf-8")
+    print(f"wrote {private_out}")
 
 
 if __name__ == "__main__":
