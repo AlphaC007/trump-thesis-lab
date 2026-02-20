@@ -1,10 +1,11 @@
 {
-  "version": "1.1",
+  "version": "1.2",
   "rules_source": "config/scenario_rules.json",
   "weights": {
-    "liquidity_resilience": 0.4,
+    "liquidity_resilience": 0.3,
     "buy_sell_momentum": 0.4,
-    "narrative_volatility_buffer": 0.2
+    "onchain_concentration": 0.2,
+    "narrative_volatility_buffer": 0.1
   },
   "liquidity": {
     "stress_drop_24h_threshold": -0.35,
@@ -13,31 +14,11 @@
       "neutral_min": 0.015
     },
     "allocations": {
-      "hard_stress_trigger": {
-        "bull": 0.05,
-        "base": 0.15,
-        "stress": 0.2
-      },
-      "healthy": {
-        "bull": 0.26,
-        "base": 0.12,
-        "stress": 0.02
-      },
-      "neutral": {
-        "bull": 0.16,
-        "base": 0.2,
-        "stress": 0.04
-      },
-      "fragile": {
-        "bull": 0.08,
-        "base": 0.22,
-        "stress": 0.1
-      },
-      "fallback": {
-        "bull": 0.15,
-        "base": 0.2,
-        "stress": 0.05
-      }
+      "hard_stress_trigger": { "bull": 0.0375, "base": 0.1125, "stress": 0.15 },
+      "healthy": { "bull": 0.195, "base": 0.09, "stress": 0.015 },
+      "neutral": { "bull": 0.12, "base": 0.15, "stress": 0.03 },
+      "fragile": { "bull": 0.06, "base": 0.165, "stress": 0.075 },
+      "fallback": { "bull": 0.1125, "base": 0.15, "stress": 0.0375 }
     }
   },
   "momentum": {
@@ -48,32 +29,18 @@
       "stress_denominator": 0.6
     },
     "allocations": {
-      "bull_trend": {
-        "bull_base": 0.28,
-        "bull_bonus": 0.06,
-        "base_base": 0.1,
-        "base_penalty": 0.04,
-        "stress_base": 0,
-        "stress_penalty": 0
-      },
-      "stress_trend": {
-        "stress_base": 0.2,
-        "stress_bonus": 0.06,
-        "base_base": 0.18,
-        "base_penalty": 0.04,
-        "bull_base": 0.02,
-        "bull_penalty": 0.02
-      },
-      "neutral": {
-        "bull": 0.16,
-        "base": 0.22,
-        "stress": 0.02
-      },
-      "fallback": {
-        "bull": 0.15,
-        "base": 0.2,
-        "stress": 0.05
-      }
+      "bull_trend": { "bull_base": 0.28, "bull_bonus": 0.06, "base_base": 0.1, "base_penalty": 0.04, "stress_base": 0.0, "stress_penalty": 0.0 },
+      "stress_trend": { "stress_base": 0.2, "stress_bonus": 0.06, "base_base": 0.18, "base_penalty": 0.04, "bull_base": 0.02, "bull_penalty": 0.02 },
+      "neutral": { "bull": 0.16, "base": 0.22, "stress": 0.02 },
+      "fallback": { "bull": 0.15, "base": 0.2, "stress": 0.05 }
+    }
+  },
+  "onchain_concentration": {
+    "diamond_hands_threshold_pct": 50.0,
+    "allocations": {
+      "diamond_hands": { "bull": 0.12, "base": 0.075, "stress": 0.005 },
+      "whale_exit_risk": { "bull": 0.02, "base": 0.06, "stress": 0.12 },
+      "unknown": { "bull": 0.06, "base": 0.08, "stress": 0.06 }
     }
   },
   "volatility_buffer": {
@@ -82,26 +49,10 @@
       "mid_max": 25
     },
     "allocations": {
-      "low": {
-        "bull": 0.08,
-        "base": 0.1,
-        "stress": 0.02
-      },
-      "mid": {
-        "bull": 0.05,
-        "base": 0.11,
-        "stress": 0.04
-      },
-      "high": {
-        "bull": 0.03,
-        "base": 0.09,
-        "stress": 0.08
-      },
-      "fallback": {
-        "bull": 0.06,
-        "base": 0.1,
-        "stress": 0.04
-      }
+      "low": { "bull": 0.04, "base": 0.05, "stress": 0.01 },
+      "mid": { "bull": 0.025, "base": 0.055, "stress": 0.02 },
+      "high": { "bull": 0.015, "base": 0.045, "stress": 0.04 },
+      "fallback": { "bull": 0.03, "base": 0.05, "stress": 0.02 }
     }
   },
   "normalization": {

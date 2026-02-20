@@ -10,6 +10,7 @@
     "weights",
     "liquidity",
     "momentum",
+    "onchain_concentration",
     "volatility_buffer",
     "normalization"
   ],
@@ -19,10 +20,11 @@
     "weights": {
       "type": "object",
       "additionalProperties": false,
-      "required": ["liquidity_resilience", "buy_sell_momentum", "narrative_volatility_buffer"],
+      "required": ["liquidity_resilience", "buy_sell_momentum", "onchain_concentration", "narrative_volatility_buffer"],
       "properties": {
         "liquidity_resilience": { "type": "number", "minimum": 0, "maximum": 1 },
         "buy_sell_momentum": { "type": "number", "minimum": 0, "maximum": 1 },
+        "onchain_concentration": { "type": "number", "minimum": 0, "maximum": 1 },
         "narrative_volatility_buffer": { "type": "number", "minimum": 0, "maximum": 1 }
       }
     },
@@ -61,6 +63,24 @@
           }
         },
         "allocations": { "$ref": "#/$defs/momentumAllocations" }
+      }
+    },
+    "onchain_concentration": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["diamond_hands_threshold_pct", "allocations"],
+      "properties": {
+        "diamond_hands_threshold_pct": { "type": "number", "minimum": 0, "maximum": 100 },
+        "allocations": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["diamond_hands", "whale_exit_risk", "unknown"],
+          "properties": {
+            "diamond_hands": { "$ref": "#/$defs/tripleAlloc" },
+            "whale_exit_risk": { "$ref": "#/$defs/tripleAlloc" },
+            "unknown": { "$ref": "#/$defs/tripleAlloc" }
+          }
+        }
       }
     },
     "volatility_buffer": {

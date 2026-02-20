@@ -26,7 +26,12 @@ def main():
 
     # Hard assertion: weights must sum exactly to 1.0
     w = rules["weights"]
-    total = float(w["liquidity_resilience"]) + float(w["buy_sell_momentum"]) + float(w["narrative_volatility_buffer"])
+    total = (
+        float(w["liquidity_resilience"])
+        + float(w["buy_sell_momentum"])
+        + float(w["onchain_concentration"])
+        + float(w["narrative_volatility_buffer"])
+    )
     if not assert_close(total, 1.0):
       print(f"ASSERTION_ERROR: weights sum must equal 1.0, got {total}")
       raise SystemExit(2)

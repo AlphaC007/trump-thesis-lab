@@ -191,6 +191,20 @@ def calculate_scenario_probabilities(data: dict, rules: dict) -> Dict[str, float
     else:
         add_alloc(probs, mom_alloc["neutral"])
 
+    # 3) On-chain concentration (Diamond Hands defense)
+    conc_cfg = rules["onchain_concentration"]
+    conc_alloc = conc_cfg["allocations"]
+    top10_holder_pct = to_float(data.get("onchain", {}).get("top10_holder_pct"))
+    diamond_threshold = float(conc_cfg["diamond_hands_threshold_pct"])
+
+    if top10_holder_pct is None:
+        add_alloc(probs, conc_alloc["unknown"])
+    elif top10_holder_pct > diamond_threshold:
+        add_alloc(probs, conc_alloc["diamond_hands"])
+    else:
+        add_alloc(probs, conc_alloc["whale_exit_risk"])
+
+    # 4) Narrative / volatility buffer
     vol_cfg = rules["volatility_buffer"]
     vol_alloc = vol_cfg["allocations"]
     price_change_24h_pct = to_float(data["derived"].get("price_change_24h_pct"))

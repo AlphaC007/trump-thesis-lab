@@ -1,15 +1,15 @@
 {
-  "as_of_utc": "2026-02-20T12:03:47Z",
+  "as_of_utc": "2026-02-20T12:06:04Z",
   "asset": "TRUMP",
   "market": {
-    "price_usd": 3.7,
+    "price_usd": 3.69,
     "mcap_usd": 863749349.9668455,
-    "volume_24h_usd": 209000099.31415308,
-    "liquidity_usd": 30356051.42,
-    "fdv_usd": 3665130875.0,
-    "buys_24h": 3319.0,
-    "sells_24h": 2993.0,
-    "buy_sell_txn_ratio_24h": 1.1089
+    "volume_24h_usd": 209175729.6045462,
+    "liquidity_usd": 30056293.27,
+    "fdv_usd": 3648610795.0,
+    "buys_24h": 3336.0,
+    "sells_24h": 3022.0,
+    "buy_sell_txn_ratio_24h": 1.1039
   },
   "onchain": {
     "top10_holder_pct": null,
@@ -19,14 +19,14 @@
     "exchange_outflow_usd_24h": null
   },
   "derived": {
-    "liq_fdv_ratio": 0.008282,
+    "liq_fdv_ratio": 0.008238,
     "liquidity_change_24h": null,
-    "price_change_24h_pct": 7.52
+    "price_change_24h_pct": 7.03
   },
   "scenario_probabilities": {
-    "Bull": 0.4528,
-    "Base": 0.4249,
-    "Stress": 0.1223
+    "Bull": 0.4525,
+    "Base": 0.3997,
+    "Stress": 0.1478
   },
   "risk_flags": [
     {
@@ -47,9 +47,10 @@
     "name": "scenario_prob_v1",
     "rules_source": "config/scenario_rules.json",
     "weights": {
-      "liquidity_resilience": 0.4,
+      "liquidity_resilience": 0.3,
       "buy_sell_momentum": 0.4,
-      "narrative_volatility_buffer": 0.2
+      "onchain_concentration": 0.2,
+      "narrative_volatility_buffer": 0.1
     }
   }
 }

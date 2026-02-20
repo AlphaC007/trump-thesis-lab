@@ -13,9 +13,9 @@
 All quantitative thresholds in this matrix are dynamically driven by `config/scenario_rules.json`.
 
 ## Dimension Weights
-- Liquidity resilience: `0.4`
+- Liquidity resilience: `0.3`
 - Buy/Sell momentum: `0.4`
-- Narrative/volatility buffer: `0.2`
+- Narrative/volatility buffer: `0.1`
 
 ## Base
 Core observation metrics:
@@ -49,29 +49,29 @@ Core observation metrics:
     },
     "allocations": {
       "hard_stress_trigger": {
-        "bull": 0.05,
-        "base": 0.15,
-        "stress": 0.2
+        "bull": 0.0375,
+        "base": 0.1125,
+        "stress": 0.15
       },
       "healthy": {
-        "bull": 0.26,
-        "base": 0.12,
-        "stress": 0.02
+        "bull": 0.195,
+        "base": 0.09,
+        "stress": 0.015
       },
       "neutral": {
-        "bull": 0.16,
-        "base": 0.2,
-        "stress": 0.04
+        "bull": 0.12,
+        "base": 0.15,
+        "stress": 0.03
       },
       "fragile": {
-        "bull": 0.08,
-        "base": 0.22,
-        "stress": 0.1
+        "bull": 0.06,
+        "base": 0.165,
+        "stress": 0.075
       },
       "fallback": {
-        "bull": 0.15,
-        "base": 0.2,
-        "stress": 0.05
+        "bull": 0.1125,
+        "base": 0.15,
+        "stress": 0.0375
       }
     }
   },
@@ -88,8 +88,8 @@ Core observation metrics:
         "bull_bonus": 0.06,
         "base_base": 0.1,
         "base_penalty": 0.04,
-        "stress_base": 0,
-        "stress_penalty": 0
+        "stress_base": 0.0,
+        "stress_penalty": 0.0
       },
       "stress_trend": {
         "stress_base": 0.2,
@@ -118,24 +118,24 @@ Core observation metrics:
     },
     "allocations": {
       "low": {
-        "bull": 0.08,
-        "base": 0.1,
-        "stress": 0.02
+        "bull": 0.04,
+        "base": 0.05,
+        "stress": 0.01
       },
       "mid": {
-        "bull": 0.05,
-        "base": 0.11,
-        "stress": 0.04
+        "bull": 0.025,
+        "base": 0.055,
+        "stress": 0.02
       },
       "high": {
-        "bull": 0.03,
-        "base": 0.09,
-        "stress": 0.08
+        "bull": 0.015,
+        "base": 0.045,
+        "stress": 0.04
       },
       "fallback": {
-        "bull": 0.06,
-        "base": 0.1,
-        "stress": 0.04
+        "bull": 0.03,
+        "base": 0.05,
+        "stress": 0.02
       }
     }
   },
