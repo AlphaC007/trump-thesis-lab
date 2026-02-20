@@ -6,8 +6,13 @@ import urllib.request
 from pathlib import Path
 from typing import Dict, Optional
 
-COINGECKO_URL = (
+COINGECKO_PUBLIC_URL = (
     "https://api.coingecko.com/api/v3/simple/price"
+    "?ids=official-trump&vs_currencies=usd"
+    "&include_market_cap=true&include_24hr_vol=true"
+)
+COINGECKO_PRO_URL = (
+    "https://pro-api.coingecko.com/api/v3/simple/price"
     "?ids=official-trump&vs_currencies=usd"
     "&include_market_cap=true&include_24hr_vol=true"
 )
@@ -48,6 +53,16 @@ def fetch_json(url: str, headers: Optional[dict] = None) -> dict:
 
 def load_rules(path: Path = RULES_PATH) -> dict:
     return json.loads(path.read_text(encoding="utf-8"))
+
+
+def fetch_coingecko_price() -> dict:
+    key = os.getenv("COINGECKO_API_KEY")
+    if key:
+        try:
+            return fetch_json(COINGECKO_PRO_URL, headers={"x-cg-pro-api-key": key})
+        except Exception:
+            pass
+    return fetch_json(COINGECKO_PUBLIC_URL)
 
 
 def to_float(v) -> Optional[float]:
@@ -365,7 +380,7 @@ def main() -> None:
 
     today_file = SNAPSHOT_DIR / f"{date_key}.snapshot.json"
 
-    cg = fetch_json(COINGECKO_URL)
+    cg = fetch_coingecko_price()
     ds = fetch_json(DEXSCREENER_URL)
 
     token = cg.get("official-trump", {})

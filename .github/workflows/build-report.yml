@@ -26,6 +26,7 @@ jobs:
 
       - name: Build snapshot (CoinGecko + DexScreener + On-chain holders)
         env:
+          COINGECKO_API_KEY: ${{ secrets.COINGECKO_API_KEY }}
           MORALIS_API_KEY: ${{ secrets.MORALIS_API_KEY }}
           SOLSCAN_API_KEY: ${{ secrets.SOLSCAN_API_KEY }}
           BIRDEYE_API_KEY: ${{ secrets.BIRDEYE_API_KEY }}
