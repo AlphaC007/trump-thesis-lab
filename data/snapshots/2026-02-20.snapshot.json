@@ -1,15 +1,15 @@
 {
-  "as_of_utc": "2026-02-20T12:54:24Z",
+  "as_of_utc": "2026-02-20T14:06:50Z",
   "asset": "TRUMP",
   "market": {
-    "price_usd": 3.64,
-    "mcap_usd": 847394768.6957362,
-    "volume_24h_usd": 198435073.56183675,
-    "liquidity_usd": 30125769.68,
-    "fdv_usd": 3634467988.0,
-    "buys_24h": 3467.0,
-    "sells_24h": 3060.0,
-    "buy_sell_txn_ratio_24h": 1.133
+    "price_usd": 3.49,
+    "mcap_usd": 810147571.2036746,
+    "volume_24h_usd": 212584521.43589348,
+    "liquidity_usd": 28911361.06,
+    "fdv_usd": 3488157961.0,
+    "buys_24h": 3522.0,
+    "sells_24h": 3356.0,
+    "buy_sell_txn_ratio_24h": 1.0495
   },
   "onchain": {
     "top10_holder_pct": 98.7567,
@@ -19,16 +19,24 @@
     "exchange_outflow_usd_24h": null
   },
   "derived": {
-    "liq_fdv_ratio": 0.008289,
+    "liq_fdv_ratio": 0.008288,
     "liquidity_change_24h": null,
-    "price_change_24h_pct": 7.04
+    "price_change_24h_pct": 2.74
   },
   "scenario_probabilities": {
-    "Bull": 0.5155,
-    "Base": 0.3929,
-    "Stress": 0.0916
+    "Bull": 0.38,
+    "Base": 0.51,
+    "Stress": 0.11
   },
   "risk_flags": [
+    {
+      "id": "solscan_pro_unauthorized",
+      "triggered": true,
+      "severity": "medium",
+      "evidence": [
+        "source:heuristic-proxy"
+      ]
+    },
     {
       "id": "using_heuristic_proxy",
       "triggered": true,

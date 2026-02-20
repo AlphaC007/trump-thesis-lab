@@ -2,6 +2,9 @@
 import datetime as dt
 import json
 import os
+import random
+import time
+import urllib.error
 import urllib.request
 from pathlib import Path
 from typing import Dict, Optional
@@ -20,6 +23,7 @@ DEXSCREENER_URL = "https://api.dexscreener.com/latest/dex/tokens/6p6xgHyF7AeE6TZ
 SOL_TOKEN_ADDRESS = "6p6xgHyF7AeE6TZkSmFsko444wqoP15icUSqi2jfGiPN"
 # Moralis (preferred if MORALIS_API_KEY is set)
 MORALIS_HOLDERS_URL = f"https://solana-gateway.moralis.io/token/mainnet/{SOL_TOKEN_ADDRESS}/holders"
+MORALIS_HOLDER_STATS_URL = f"https://solana-gateway.moralis.io/token/mainnet/holders/{SOL_TOKEN_ADDRESS}"
 MORALIS_META_URL = f"https://solana-gateway.moralis.io/token/mainnet/{SOL_TOKEN_ADDRESS}/metadata"
 
 # Solscan fallback
@@ -42,13 +46,53 @@ TIMESERIES_PATH = Path("data/timeseries.jsonl")
 RULES_PATH = Path("config/scenario_rules.json")
 
 
-def fetch_json(url: str, headers: Optional[dict] = None) -> dict:
-    req_headers = {"User-Agent": "trump-thesis-lab/3.1"}
+class ApiNonRetryableError(Exception):
+    pass
+
+
+class ApiUnauthorizedError(ApiNonRetryableError):
+    pass
+
+
+class ApiNotFoundError(ApiNonRetryableError):
+    pass
+
+
+class ApiRetryableError(Exception):
+    pass
+
+
+def fetch_json(url: str, headers: Optional[dict] = None, timeout: int = 25) -> dict:
+    req_headers = {"User-Agent": "trump-thesis-lab/4.0"}
     if headers:
         req_headers.update(headers)
-    req = urllib.request.Request(url, headers=req_headers)
-    with urllib.request.urlopen(req, timeout=25) as r:
-        return json.loads(r.read().decode("utf-8"))
+
+    last_err = None
+    for attempt in range(3):
+        try:
+            req = urllib.request.Request(url, headers=req_headers)
+            with urllib.request.urlopen(req, timeout=timeout) as r:
+                return json.loads(r.read().decode("utf-8"))
+        except urllib.error.HTTPError as e:
+            code = e.code
+            if code in (401, 403):
+                raise ApiUnauthorizedError(f"{code} unauthorized/forbidden: {url}")
+            if code == 404:
+                raise ApiNotFoundError(f"404 not found: {url}")
+            if code == 429 or 500 <= code < 600:
+                last_err = ApiRetryableError(f"retryable HTTP {code}: {url}")
+            else:
+                raise ApiNonRetryableError(f"non-retryable HTTP {code}: {url}")
+        except (urllib.error.URLError, TimeoutError) as e:
+            last_err = ApiRetryableError(str(e))
+
+        if attempt < 2:
+            backoff = (2 ** attempt) + random.uniform(0.05, 0.35)
+            time.sleep(backoff)
+
+    if last_err:
+        raise last_err
+    raise ApiRetryableError(f"unknown retry failure: {url}")
 
 
 def load_rules(path: Path = RULES_PATH) -> dict:
@@ -152,41 +196,17 @@ def compute_top10_proxy(liquidity_usd: Optional[float], fdv_usd: Optional[float]
     return round(proxy, 4)
 
 
-def fetch_top10_holder_pct(liquidity_usd: Optional[float], fdv_usd: Optional[float]) -> tuple[Optional[float], str, bool]:
+def fetch_top10_holder_pct(liquidity_usd: Optional[float], fdv_usd: Optional[float]) -> tuple[Optional[float], str, bool, list[str]]:
     """
-    Returns (top10_holder_pct, source_id, using_proxy).
-    Priority:
-      1) Moralis
-      2) Solscan
-      3) Birdeye
-      4) Solana RPC fallback
-      5) Heuristic proxy model
+    Returns (top10_holder_pct, source_id, using_proxy, risk_flags).
+    Fallback tree:
+      Tier 1: Solscan Pro hard truth
+      Tier 2: Moralis trend proxy (holder stats)
+      Tier 3: Heuristic proxy
     """
-    # 1) Moralis path
-    moralis_key = os.getenv("MORALIS_API_KEY")
-    if moralis_key:
-        try:
-            headers = {"X-API-Key": moralis_key}
-            holders_resp = fetch_json(MORALIS_HOLDERS_URL, headers=headers)
-            meta_resp = fetch_json(MORALIS_META_URL, headers=headers)
+    flags: list[str] = []
 
-            holders = holders_resp.get("result", []) if isinstance(holders_resp, dict) else []
-            # Moralis supply/decimals fields can vary by plan/version; handle common keys.
-            decimals = to_float(meta_resp.get("decimals") or (meta_resp.get("result") or {}).get("decimals"))
-            total_supply = to_float(
-                meta_resp.get("totalSupply")
-                or meta_resp.get("total_supply")
-                or (meta_resp.get("result") or {}).get("totalSupply")
-                or (meta_resp.get("result") or {}).get("total_supply")
-            )
-
-            pct = _compute_top10_pct(holders, total_supply, decimals, amount_key="amount")
-            if pct is not None:
-                return pct, "moralis", False
-        except Exception:
-            pass
-
-    # 2) Solscan fallback
+    # Tier 1: Solscan Pro hard truth
     try:
         api_key = os.getenv("SOLSCAN_API_KEY")
         headers = {"token": api_key} if api_key else {}
@@ -201,62 +221,31 @@ def fetch_top10_holder_pct(liquidity_usd: Optional[float], fdv_usd: Optional[flo
 
         pct = _compute_top10_pct(holders, total_supply, decimals, amount_key="amount")
         if pct is not None:
-            return pct, "solscan", False
-    except Exception:
-        pass
+            return pct, "solscan-pro", False, flags
+    except ApiUnauthorizedError:
+        flags.append("solscan_pro_unauthorized")
+    except (ApiNotFoundError, ApiNonRetryableError, ApiRetryableError):
+        flags.append("solscan_pro_unavailable")
 
-    # 3) Birdeye fallback
+    # Tier 2: Moralis trend proxy (stats endpoint)
     try:
-        birdeye_key = os.getenv("BIRDEYE_API_KEY")
-        b_headers = {"x-chain": "solana"}
-        if birdeye_key:
-            b_headers["X-API-KEY"] = birdeye_key
+        moralis_key = os.getenv("MORALIS_API_KEY")
+        if moralis_key:
+            stats = fetch_json(MORALIS_HOLDER_STATS_URL, headers={"X-API-Key": moralis_key})
+            # endpoint returns trend stats, not guaranteed top10 composition; use as confidence-enhancing proxy context
+            data = stats.get("data", {}) if isinstance(stats, dict) else {}
+            if data:
+                proxy = compute_top10_proxy(liquidity_usd, fdv_usd)
+                if proxy is not None:
+                    return proxy, "moralis-trend-proxy", True, flags + ["using_trend_proxy"]
+    except (ApiUnauthorizedError, ApiNotFoundError, ApiNonRetryableError, ApiRetryableError):
+        flags.append("moralis_stats_unavailable")
 
-        holders_resp = fetch_json(BIRDEYE_HOLDERS_URL, headers=b_headers)
-        meta_resp = fetch_json(BIRDEYE_META_URL, headers=b_headers)
-
-        data_h = holders_resp.get("data", {}) if isinstance(holders_resp, dict) else {}
-        holders = data_h.get("items") or data_h.get("holders") or []
-
-        data_m = meta_resp.get("data", {}) if isinstance(meta_resp, dict) else {}
-        decimals = to_float(data_m.get("decimals"))
-        total_supply = to_float(data_m.get("supply") or data_m.get("totalSupply") or data_m.get("total_supply"))
-
-        # birdeye holder amount key can vary
-        pct = _compute_top10_pct(holders, total_supply, decimals, amount_key="amount")
-        if pct is None:
-            pct = _compute_top10_pct(holders, total_supply, decimals, amount_key="balance")
-        if pct is not None:
-            return pct, "birdeye", False
-    except Exception:
-        pass
-
-    # 4) Solana RPC fallback (no API key needed)
-    try:
-        supply_resp = rpc_call("getTokenSupply", [SOL_TOKEN_ADDRESS])
-        supply_val = (((supply_resp.get("result") or {}).get("value") or {}))
-        decimals = to_float(supply_val.get("decimals"))
-        total_supply_ui = to_float(supply_val.get("uiAmountString") or supply_val.get("uiAmount"))
-
-        largest_resp = rpc_call("getTokenLargestAccounts", [SOL_TOKEN_ADDRESS])
-        largest = (((largest_resp.get("result") or {}).get("value") or []))
-
-        if decimals is None or total_supply_ui in (None, 0):
-            raise ValueError("solana-rpc supply unavailable")
-
-        top_sum_ui = 0.0
-        for item in largest[:10]:
-            ui = to_float(item.get("uiAmountString") or item.get("uiAmount"))
-            if ui is not None:
-                top_sum_ui += ui
-
-        pct = (top_sum_ui / total_supply_ui) * 100.0
-        return round(pct, 4), "solana-rpc", False
-    except Exception:
-        proxy = compute_top10_proxy(liquidity_usd, fdv_usd)
-        if proxy is not None:
-            return proxy, "heuristic-proxy", True
-        return None, "heuristic-proxy", True
+    # Tier 3: Heuristic proxy
+    proxy = compute_top10_proxy(liquidity_usd, fdv_usd)
+    if proxy is not None:
+        return proxy, "heuristic-proxy", True, flags + ["using_heuristic_proxy"]
+    return None, "heuristic-proxy", True, flags + ["using_heuristic_proxy"]
 
 
 def append_timeseries(snapshot: dict) -> None:
@@ -267,7 +256,8 @@ def append_timeseries(snapshot: dict) -> None:
         "liquidity_usd": (snapshot.get("market") or {}).get("liquidity_usd"),
         "buy_sell_txn_ratio_24h": (snapshot.get("market") or {}).get("buy_sell_txn_ratio_24h"),
         "top10_holder_pct": (snapshot.get("onchain") or {}).get("top10_holder_pct"),
-        "scenario_probabilities": snapshot.get("scenario_probabilities") or {}
+        "scenario_probabilities": snapshot.get("scenario_probabilities") or {},
+        "risk_flags": [rf.get("id") for rf in (snapshot.get("risk_flags") or [])]
     }
     TIMESERIES_PATH.parent.mkdir(parents=True, exist_ok=True)
     with TIMESERIES_PATH.open("a", encoding="utf-8") as f:
@@ -407,7 +397,7 @@ def main() -> None:
     if liquidity_usd is not None and fdv_usd not in (None, 0):
         liq_fdv_ratio = liquidity_usd / fdv_usd
 
-    top10_holder_pct, holder_source, using_proxy = fetch_top10_holder_pct(liquidity_usd, fdv_usd)
+    top10_holder_pct, holder_source, using_proxy, top10_flags = fetch_top10_holder_pct(liquidity_usd, fdv_usd)
 
     snapshot = {
         "as_of_utc": as_of,
@@ -444,7 +434,17 @@ def main() -> None:
         }
     }
 
-    if using_proxy:
+    for f in top10_flags:
+        if f == "using_heuristic_proxy":
+            continue
+        snapshot["risk_flags"].append({
+            "id": f,
+            "triggered": True,
+            "severity": "medium" if "unauthorized" in f else "low",
+            "evidence": [f"source:{holder_source}"]
+        })
+
+    if using_proxy and holder_source == "heuristic-proxy":
         snapshot["risk_flags"].append({
             "id": "using_heuristic_proxy",
             "triggered": True,
