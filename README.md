@@ -1,5 +1,7 @@
 # trump-thesis-lab
 
+**Version:** `v1.0.0-Stable-RAG`
+
 ## What this repo is
 A public, reproducible research repository for $TRUMP market structure analysis.
 
