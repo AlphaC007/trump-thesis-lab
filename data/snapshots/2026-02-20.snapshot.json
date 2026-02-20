@@ -1,47 +1,48 @@
 {
-  "as_of_utc": "2026-02-20T12:15:28Z",
+  "as_of_utc": "2026-02-20T12:20:11Z",
   "asset": "TRUMP",
   "market": {
-    "price_usd": 3.65,
-    "mcap_usd": 863749349.9668455,
-    "volume_24h_usd": 208905971.8918422,
-    "liquidity_usd": 30337216.52,
-    "fdv_usd": 3662823039.0,
-    "buys_24h": 3395.0,
-    "sells_24h": 3032.0,
-    "buy_sell_txn_ratio_24h": 1.1197
+    "price_usd": 3.67,
+    "mcap_usd": 852172905.801234,
+    "volume_24h_usd": 212896901.63590106,
+    "liquidity_usd": 30293789.37,
+    "fdv_usd": 3656717503.0,
+    "buys_24h": 3404.0,
+    "sells_24h": 3035.0,
+    "buy_sell_txn_ratio_24h": 1.1216
   },
   "onchain": {
-    "top10_holder_pct": null,
-    "top10_holder_source": "solana-rpc",
+    "top10_holder_pct": 98.7573,
+    "top10_holder_source": "heuristic-proxy",
     "dex_depth_2pct_usd": null,
     "exchange_inflow_usd_24h": null,
     "exchange_outflow_usd_24h": null
   },
   "derived": {
-    "liq_fdv_ratio": 0.008282,
+    "liq_fdv_ratio": 0.008284,
     "liquidity_change_24h": null,
-    "price_change_24h_pct": 7.24
+    "price_change_24h_pct": 7.16
   },
   "scenario_probabilities": {
-    "Bull": 0.4535,
-    "Base": 0.3988,
-    "Stress": 0.1477
+    "Bull": 0.5147,
+    "Base": 0.3936,
+    "Stress": 0.0917
   },
   "risk_flags": [
     {
-      "id": "onchain_top10_unavailable",
+      "id": "using_heuristic_proxy",
       "triggered": true,
-      "severity": "low",
+      "severity": "medium",
       "evidence": [
-        "source:solscan"
+        "source:heuristic-proxy",
+        "formula:top10=100-((liq/fdv)*100*1.5)"
       ]
     }
   ],
   "sources": [
     "coingecko",
     "dexscreener",
-    "solana-rpc"
+    "heuristic-proxy"
   ],
   "model": {
     "name": "scenario_prob_v1",

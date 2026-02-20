@@ -21,6 +21,10 @@ MORALIS_META_URL = f"https://solana-gateway.moralis.io/token/mainnet/{SOL_TOKEN_
 SOLSCAN_HOLDERS_URL = f"https://pro-api.solscan.io/v2.0/token/holders?address={SOL_TOKEN_ADDRESS}&page=1&page_size=10"
 SOLSCAN_META_URL = f"https://pro-api.solscan.io/v2.0/token/meta?address={SOL_TOKEN_ADDRESS}"
 
+# Birdeye fallback (often meme-friendly)
+BIRDEYE_HOLDERS_URL = f"https://public-api.birdeye.so/defi/v3/token/holder?address={SOL_TOKEN_ADDRESS}&offset=0&limit=10"
+BIRDEYE_META_URL = f"https://public-api.birdeye.so/defi/token_overview?address={SOL_TOKEN_ADDRESS}"
+
 # Public Solana RPC fallback (no API key)
 SOLANA_RPC_URLS = [
     "https://solana-rpc.publicnode.com",
@@ -119,13 +123,28 @@ def rpc_call(method: str, params: list) -> dict:
     raise RuntimeError("No Solana RPC endpoint available")
 
 
-def fetch_top10_holder_pct() -> tuple[Optional[float], str]:
+def compute_top10_proxy(liquidity_usd: Optional[float], fdv_usd: Optional[float]) -> Optional[float]:
     """
-    Returns (top10_holder_pct, source_id).
+    Heuristic proxy when holder endpoints are unavailable:
+      top10_holder_pct_proxy = 100 - ((liquidity_usd / fdv_usd) * 100 * 1.5)
+    with floor at 55.0 and cap at 99.0.
+    """
+    if liquidity_usd is None or fdv_usd in (None, 0):
+        return None
+    proxy = 100.0 - ((liquidity_usd / fdv_usd) * 100.0 * 1.5)
+    proxy = max(55.0, min(99.0, proxy))
+    return round(proxy, 4)
+
+
+def fetch_top10_holder_pct(liquidity_usd: Optional[float], fdv_usd: Optional[float]) -> tuple[Optional[float], str, bool]:
+    """
+    Returns (top10_holder_pct, source_id, using_proxy).
     Priority:
-      1) Moralis (if endpoint available)
-      2) Solscan (if API tier allows)
-      3) Solana public RPC fallback
+      1) Moralis
+      2) Solscan
+      3) Birdeye
+      4) Solana RPC fallback
+      5) Heuristic proxy model
     """
     # 1) Moralis path
     moralis_key = os.getenv("MORALIS_API_KEY")
@@ -147,7 +166,7 @@ def fetch_top10_holder_pct() -> tuple[Optional[float], str]:
 
             pct = _compute_top10_pct(holders, total_supply, decimals, amount_key="amount")
             if pct is not None:
-                return pct, "moralis"
+                return pct, "moralis", False
         except Exception:
             pass
 
@@ -166,11 +185,37 @@ def fetch_top10_holder_pct() -> tuple[Optional[float], str]:
 
         pct = _compute_top10_pct(holders, total_supply, decimals, amount_key="amount")
         if pct is not None:
-            return pct, "solscan"
+            return pct, "solscan", False
     except Exception:
         pass
 
-    # 3) Solana RPC fallback (no API key needed)
+    # 3) Birdeye fallback
+    try:
+        birdeye_key = os.getenv("BIRDEYE_API_KEY")
+        b_headers = {"x-chain": "solana"}
+        if birdeye_key:
+            b_headers["X-API-KEY"] = birdeye_key
+
+        holders_resp = fetch_json(BIRDEYE_HOLDERS_URL, headers=b_headers)
+        meta_resp = fetch_json(BIRDEYE_META_URL, headers=b_headers)
+
+        data_h = holders_resp.get("data", {}) if isinstance(holders_resp, dict) else {}
+        holders = data_h.get("items") or data_h.get("holders") or []
+
+        data_m = meta_resp.get("data", {}) if isinstance(meta_resp, dict) else {}
+        decimals = to_float(data_m.get("decimals"))
+        total_supply = to_float(data_m.get("supply") or data_m.get("totalSupply") or data_m.get("total_supply"))
+
+        # birdeye holder amount key can vary
+        pct = _compute_top10_pct(holders, total_supply, decimals, amount_key="amount")
+        if pct is None:
+            pct = _compute_top10_pct(holders, total_supply, decimals, amount_key="balance")
+        if pct is not None:
+            return pct, "birdeye", False
+    except Exception:
+        pass
+
+    # 4) Solana RPC fallback (no API key needed)
     try:
         supply_resp = rpc_call("getTokenSupply", [SOL_TOKEN_ADDRESS])
         supply_val = (((supply_resp.get("result") or {}).get("value") or {}))
@@ -181,7 +226,7 @@ def fetch_top10_holder_pct() -> tuple[Optional[float], str]:
         largest = (((largest_resp.get("result") or {}).get("value") or []))
 
         if decimals is None or total_supply_ui in (None, 0):
-            return None, "solana-rpc"
+            raise ValueError("solana-rpc supply unavailable")
 
         top_sum_ui = 0.0
         for item in largest[:10]:
@@ -190,9 +235,12 @@ def fetch_top10_holder_pct() -> tuple[Optional[float], str]:
                 top_sum_ui += ui
 
         pct = (top_sum_ui / total_supply_ui) * 100.0
-        return round(pct, 4), "solana-rpc"
+        return round(pct, 4), "solana-rpc", False
     except Exception:
-        return None, "solana-rpc"
+        proxy = compute_top10_proxy(liquidity_usd, fdv_usd)
+        if proxy is not None:
+            return proxy, "heuristic-proxy", True
+        return None, "heuristic-proxy", True
 
 
 def calculate_scenario_probabilities(data: dict, rules: dict) -> Dict[str, float]:
@@ -328,7 +376,7 @@ def main() -> None:
     if liquidity_usd is not None and fdv_usd not in (None, 0):
         liq_fdv_ratio = liquidity_usd / fdv_usd
 
-    top10_holder_pct, holder_source = fetch_top10_holder_pct()
+    top10_holder_pct, holder_source, using_proxy = fetch_top10_holder_pct(liquidity_usd, fdv_usd)
 
     snapshot = {
         "as_of_utc": as_of,
@@ -365,12 +413,19 @@ def main() -> None:
         }
     }
 
-    if top10_holder_pct is None:
+    if using_proxy:
+        snapshot["risk_flags"].append({
+            "id": "using_heuristic_proxy",
+            "triggered": True,
+            "severity": "medium",
+            "evidence": ["source:heuristic-proxy", "formula:top10=100-((liq/fdv)*100*1.5)"]
+        })
+    elif top10_holder_pct is None:
         snapshot["risk_flags"].append({
             "id": "onchain_top10_unavailable",
             "triggered": True,
             "severity": "low",
-            "evidence": ["source:solscan"]
+            "evidence": [f"source:{holder_source}"]
         })
 
     snapshot["scenario_probabilities"] = calculate_scenario_probabilities(snapshot, rules)
