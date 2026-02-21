@@ -67,3 +67,8 @@ This framework is **bull-first, not fact-denying**.
 - Facts are objective.
 - Interpretation is directional.
 - Risk disclosure is mandatory.
+
+## Operational Note
+- Focus before noise.
+- Yield to evidence.
+- Lean into discipline.
