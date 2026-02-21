@@ -13,8 +13,8 @@
 - Prediction-market shifts: monitor probability shocks and narrative regime shifts.
 
 ## 🪙 3. Crypto Liquidity & Narratives (Fact Layer)
-- BTC: $68534.00 (+2.23%)
-- ETH: $1990.14 (+2.30%)
+- BTC: $68438.00 (+2.08%)
+- ETH: $1986.81 (+2.28%)
 - Fear & Greed: 8 (Extreme Fear)
 - Funding / OI / Liquidation snapshot: pending unified derivatives panel feed.
 
