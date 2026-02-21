@@ -57,44 +57,44 @@ def main():
         drift = f"Bull {bull-pb:+.4f}, Base {base-pba:+.4f}, Stress {stress-ps:+.4f}"
 
     # falsification visibility based on available fields
-    trigger_a = "数据盲区（缺少交易所净流入实时字段）"
-    trigger_b = "数据盲区（dex_depth_2pct_usd 未持续可用）"
-    trigger_c = "未触发"
+    trigger_a = "Data blind spot (missing real-time exchange netflow field)"
+    trigger_b = "Data blind spot (dex_depth_2pct_usd not consistently available)"
+    trigger_c = "Not triggered"
     if prev and abs(latest.get("top10_holder_pct", 0) - prev.get("top10_holder_pct", 0)) > 3:
-        trigger_c = "触发"
+        trigger_c = "Triggered"
 
-    dh_state = "稳固" if stress <= 0.12 else "承压"
+    dh_state = "Stable" if stress <= 0.12 else "Under Pressure"
 
     text = []
-    text.append("# 系统健康度与数据巡检日报")
+    text.append("# System Health & Data Inspection Report")
     text.append("")
-    text.append(f"- 日期（UTC+8）：{now_cn}")
-    text.append(f"- 总结结论：系统主链路可用，当前风险评估为【{dh_state}】。")
+    text.append(f"- Date (UTC+8): {now_cn}")
+    text.append(f"- Executive Summary: Core pipeline available; current risk assessment is [{dh_state}].")
     text.append("")
     text.append("## 1) Pipeline Health")
     if last_two:
         for i, r in enumerate(last_two, start=1):
-            text.append(f"- 最近第{i}次：{r[2]} ({r[1]}) · {r[0]} · {r[3]}")
+            text.append(f"- Most recent run #{i}: {r[2]} ({r[1]}) · {r[0]} · {r[3]}")
     else:
-        text.append("- 最近两次状态：无法读取 GitHub Actions API")
-    text.append("- 上游 API：CoinGecko/DexScreener 正常；on-chain 可能触发兜底。")
+        text.append("- Last two runs: unable to read GitHub Actions API")
+    text.append("- Upstream APIs: CoinGecko/DexScreener normal; on-chain may trigger fallback.")
     text.append("")
     text.append("## 2) Data Delta")
     text.append(f"- as_of_utc: {latest['as_of_utc']}")
     text.append(f"- price_usd: {latest['price_usd']}")
     text.append(f"- top10_holder_pct: {latest['top10_holder_pct']}")
     text.append(f"- scenario_probabilities: Bull {bull}, Base {base}, Stress {stress}")
-    text.append(f"- 概率漂移: {drift}")
+    text.append(f"- Probability drift: {drift}")
     text.append("")
     text.append("## 3) Falsification Radar")
     text.append(f"- Trigger A: {trigger_a}")
     text.append(f"- Trigger B: {trigger_b}")
     text.append(f"- Trigger C: {trigger_c}")
-    text.append(f"- Diamond Hands 状态：【{dh_state}】")
+    text.append(f"- Diamond Hands state: [{dh_state}]")
     text.append("")
     text.append("## 4) Risk Flags & Honesty Boundary")
-    text.append("- 若启用 `using_heuristic_proxy`，必须在快照中显式披露。")
-    text.append("- 本报告遵循结论先行、数据支撑、盲区明示。")
+    text.append("- If `using_heuristic_proxy` is active, it must be explicitly disclosed in snapshots.")
+    text.append("- This report follows: conclusion first, data-backed evidence, and explicit blind-spot disclosure.")
 
     OUT.write_text("\n".join(text) + "\n", encoding="utf-8")
     print(f"wrote {OUT}")

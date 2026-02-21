@@ -95,9 +95,9 @@ def main():
     trump = get_local_trump_state() or {}
 
     md = []
-    md.append(f"# 📅 {date_s} 每日跨市场简报 (CIO 内部参阅)")
+    md.append(f"# 📅 {date_s} Daily Cross-Market Briefing (CIO Internal)")
     md.append("")
-    md.append("## 🌍 1. 宏观与传统金融 (Macro & TradFi)")
+    md.append("## 🌍 1. Macro & TradFi")
     md.append(
         "S&P 500: "
         f"{macro['S&P 500']['price']:.2f} ({pct(macro['S&P 500']['change_pct'])})"
@@ -105,41 +105,41 @@ def main():
         f"{macro['Nasdaq']['price']:.2f} ({pct(macro['Nasdaq']['change_pct'])})"
         " | DXY: "
         f"{macro['DXY']['price']:.2f} ({pct(macro['DXY']['change_pct'])})"
-        " | 美债10Y: "
+        " | US10Y: "
         f"{macro['US10Y']['price']:.2f} ({pct(macro['US10Y']['change_pct'])})"
-        " | 黄金: "
+        " | Gold: "
         f"{macro['Gold']['price']:.2f} ({pct(macro['Gold']['change_pct'])})"
-        " | 原油: "
+        " | Crude Oil: "
         f"{macro['Crude']['price']:.2f} ({pct(macro['Crude']['change_pct'])})"
     )
-    md.append("【CIO 深度解析区：评估今日宏观流动性对风险资产的压制/提振作用，提炼美联储最新动态】")
+    md.append("[CIO Deep Analysis: assess how today's macro liquidity conditions suppress/support risk assets; extract latest Fed implications]")
     md.append("")
-    md.append("## 🏛️ 2. 政治、监管与预测市场 (Polymarket & Policy)")
-    md.append("【CIO 深度解析区：追踪 Polymarket 核心赔率异动、美国政治博弈及 SEC 监管风向】")
+    md.append("## 🏛️ 2. Policy, Regulation & Prediction Markets (Polymarket)")
+    md.append("[CIO Deep Analysis: track key Polymarket odds shifts, US political game dynamics, and SEC regulatory direction]")
     md.append("")
-    md.append("## 🪙 3. Crypto 核心资金面与热点 (Liquidity & Narratives)")
+    md.append("## 🪙 3. Crypto Liquidity & Narratives")
     md.append(
         f"BTC: ${cg['btc']['price']:.2f} ({pct(cg['btc']['change_pct'])})"
         f" | ETH: ${cg['eth']['price']:.2f} ({pct(cg['eth']['change_pct'])})"
         f" | Fear & Greed: {fg['value']} ({fg['classification']})"
     )
-    md.append("【CIO 深度解析区：分析 ETF 资金流向，扫描今日 Twitter/社区 核心炒作热点及巨鲸异动】")
+    md.append("[CIO Deep Analysis: analyze ETF flow direction, scan social/community narrative hotspots, and detect whale anomalies]")
     md.append("")
-    md.append("## 💎 4. $TRUMP 本阵营雷达 (Local Data)")
+    md.append("## 💎 4. $TRUMP Local Radar")
     p = trump.get("price")
     c = trump.get("top10_holder_pct")
     b = trump.get("bull")
     flags = trump.get("risk_flags", [])
     md.append(
-        f"价格: ${p if p is not None else 'N/A'}"
-        f" | 集中度: {c if c is not None else 'N/A'}%"
-        f" | 看涨概率: {round(b*100,2) if isinstance(b,(int,float)) else 'N/A'}%"
-        f" | 系统告警: {', '.join(flags) if flags else 'none'}"
+        f"Price: ${p if p is not None else 'N/A'}"
+        f" | Concentration: {c if c is not None else 'N/A'}%"
+        f" | Bull Probability: {round(b*100,2) if isinstance(b,(int,float)) else 'N/A'}%"
+        f" | System Flags: {', '.join(flags) if flags else 'none'}"
     )
-    md.append("【CIO 深度解析区：结合外部宏观与内部数据，评估当前 Diamond Hands 结构的健康度】")
+    md.append("[CIO Deep Analysis: combine external macro and internal metrics to assess current Diamond Hands structural health]")
     md.append("")
-    md.append("## ⚠️ 5. 今日行动雷达 (Actionable Insights)")
-    md.append("【CIO 深度解析区：总结 1-2 个交易风险点或高胜率埋伏方向】")
+    md.append("## ⚠️ 5. Actionable Insights")
+    md.append("[CIO Deep Analysis: summarize 1-2 key risk points or high-probability tactical setups]")
 
     # Public report: hard data + placeholder-only analysis blocks (safe to publish)
     OUT_DIR.mkdir(parents=True, exist_ok=True)
@@ -153,15 +153,15 @@ def main():
     private_md = [
         f"# 🔒 {date_s} CIO Private Strategy Notes",
         "",
-        "## 1) 宏观与传统金融 - 深度解析",
+        "## 1) Macro & TradFi - Deep Analysis",
         "",
-        "## 2) 政治、监管与预测市场 - 深度解析",
+        "## 2) Policy / Regulation / Prediction Markets - Deep Analysis",
         "",
-        "## 3) Crypto 资金面与叙事 - 深度解析",
+        "## 3) Crypto Liquidity & Narratives - Deep Analysis",
         "",
-        "## 4) $TRUMP 结构评估 - 深度解析",
+        "## 4) $TRUMP Structural Assessment - Deep Analysis",
         "",
-        "## 5) 今日行动雷达（敏感）",
+        "## 5) Action Radar (Sensitive)",
         "",
     ]
     private_out.write_text("\n".join(private_md), encoding="utf-8")
