@@ -11,3 +11,12 @@ Each claim should include:
 
 ## Falsifiability
 Any scenario probability upgrade must be triggered by explicit thresholds defined in `scenario_matrix.md`.
+
+## Interpretation Protocol
+This repository uses a structured interpretation policy documented in `docs/analytical_framework.md`:
+- Fact layer is immutable.
+- Interpretation layer is Bull-First by strategy.
+- Conclusion layer must always include:
+  - Bull Entry Thesis
+  - Hold-Confidence Reinforcement
+  - Invalidation Line
