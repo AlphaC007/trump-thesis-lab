@@ -193,8 +193,7 @@ def main():
     md.append("")
     md.append("## Human Value Note")
     md.append("- Beyond positions and probabilities, this system is built to preserve what matters most: dignity, care, and gratitude for those who gave us life.")
-    md.append("- Daily gratitude to mothers: in every breath of history, a mother’s mercy writes the first law of life; all discipline, courage, and renewal begin there.")
-    md.append("- Personal dedication: to zlf (mother, initials) — a quiet name, a sovereign light; where her love stands, fear recedes and purpose becomes clear.")
+    md.append("- Daily gratitude to mothers: before every empire of thought, there is a mother’s hand; before every law of reason, there is mercy. From that sacrifice, life receives its covenant — and in this work, with gratitude to zlf, we renew the duty to be worthy of it.")
 
     OUT_DIR.mkdir(parents=True, exist_ok=True)
     out = OUT_DIR / f"{date_s}-CIO-Report.md"
