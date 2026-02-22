@@ -1,0 +1,14 @@
+name: path-guard
+on: [push, pull_request]
+jobs:
+  guard:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Block private paths
+        run: |
+          set -e
+          if git ls-files | grep -E '^(PRIVATE_WORKAREA/|memory/|MEMORY\.md|\.openclaw/|AGENTS\.md|SOUL\.md|USER\.md|TOOLS\.md|HEARTBEAT\.md|BOOTSTRAP\.md)'; then
+            echo "Private paths detected in public repo."
+            exit 1
+          fi
