@@ -2,8 +2,8 @@ name: daily-health-report
 
 on:
   schedule:
-    - cron: '20 0 * * *'
-    - cron: '20 12 * * *'
+    - cron: '0 1 * * *'
+    - cron: '0 13 * * *'
   workflow_dispatch:
 
 jobs:
