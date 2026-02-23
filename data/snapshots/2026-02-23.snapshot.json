@@ -1,0 +1,65 @@
+{
+  "as_of_utc": "2026-02-23T05:22:19Z",
+  "asset": "TRUMP",
+  "market": {
+    "price_usd": 3.25,
+    "mcap_usd": 754642164.151663,
+    "volume_24h_usd": 108318188.86282119,
+    "liquidity_usd": 27024294.65,
+    "fdv_usd": 3252457859.0,
+    "buys_24h": 955.0,
+    "sells_24h": 1211.0,
+    "buy_sell_txn_ratio_24h": 0.7886
+  },
+  "onchain": {
+    "top10_holder_pct": 98.7537,
+    "top10_holder_source": "heuristic-proxy",
+    "dex_depth_2pct_usd": null,
+    "exchange_inflow_usd_24h": null,
+    "exchange_outflow_usd_24h": null
+  },
+  "derived": {
+    "liq_fdv_ratio": 0.008309,
+    "liquidity_change_24h": -0.035798,
+    "price_change_24h_pct": -5.06
+  },
+  "scenario_probabilities": {
+    "Bull": 0.38,
+    "Base": 0.51,
+    "Stress": 0.11
+  },
+  "risk_flags": [
+    {
+      "id": "solscan_pro_unauthorized",
+      "triggered": true,
+      "severity": "medium",
+      "evidence": [
+        "source:heuristic-proxy"
+      ]
+    },
+    {
+      "id": "using_heuristic_proxy",
+      "triggered": true,
+      "severity": "medium",
+      "evidence": [
+        "source:heuristic-proxy",
+        "formula:top10=100-((liq/fdv)*100*1.5)"
+      ]
+    }
+  ],
+  "sources": [
+    "coingecko",
+    "dexscreener",
+    "heuristic-proxy"
+  ],
+  "model": {
+    "name": "scenario_prob_v1",
+    "rules_source": "config/scenario_rules.json",
+    "weights": {
+      "liquidity_resilience": 0.3,
+      "buy_sell_momentum": 0.4,
+      "onchain_concentration": 0.2,
+      "narrative_volatility_buffer": 0.1
+    }
+  }
+}
