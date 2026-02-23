@@ -58,3 +58,6 @@
 - Trigger B status: {{TRIGGER_B_STATUS}}
 - Trigger C status: {{TRIGGER_C_STATUS}}
 - Notes on proxy/fallback usage: {{PROXY_NOTES}}
+
+## Human Value Note
+- Beyond positions and probabilities, this system is built to preserve what matters most: dignity, care, and gratitude for those who gave us life.
