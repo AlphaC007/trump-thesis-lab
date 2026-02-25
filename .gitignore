@@ -1,2 +1,16 @@
 # Private strategy workspace (local only; never push)
 PRIVATE_WORKAREA/
+
+# Security: prevent accidental sensitive file commits
+.env*
+*.key
+*.pem
+*.p12
+auth.json
+models.json
+MEMORY.md
+SOUL.md
+USER.md
+IDENTITY.md
+AGENTS.md
+.openclaw/
