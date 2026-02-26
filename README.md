@@ -59,3 +59,24 @@ Upcoming Dimensions:
   "latest_snapshot": "data/snapshots/YYYY-MM-DD.snapshot.json"
 }
 <!-- MACHINE_SUMMARY_END -->
+
+## Contributing
+- Open an issue to discuss substantial changes before starting implementation.
+- Create a feature branch and keep pull requests focused on a single purpose.
+- Include a clear description of what changed, why it changed, and how it was validated.
+- Link related issues or documents, and add screenshots for UI changes.
+- Follow existing naming and file organization conventions in the repository.
+- Keep commits atomic with descriptive messages and update docs when behavior changes.
+
+### Pull request guidelines
+- Ensure the branch is up to date with the target branch before requesting review.
+- Run relevant checks/tests locally and summarize the results in the PR.
+- Add or update tests when changing logic, data contracts, or schemas.
+- Request review only after resolving obvious TODOs and removing debug artifacts.
+
+### Code style
+- Prefer clear, explicit code and avoid unnecessary complexity.
+- Keep functions and scripts small, single-purpose, and easy to review.
+- Preserve reproducibility: avoid hidden state and document assumptions near the code.
+- Use consistent formatting and terminology that matches existing docs and data labels.
+
