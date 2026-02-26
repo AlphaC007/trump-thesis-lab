@@ -1,19 +1,19 @@
 # System Health & Data Inspection Report
 
-- Date (UTC+8): 2026-02-26 13:36
+- Date (UTC+8): 2026-02-26 23:40
 - Executive Summary: Core pipeline available; current risk assessment is [Stable].
 
 ## 1) Pipeline Health
-- Most recent run #1: success (schedule) · 2026-02-26T05:12:14Z · https://github.com/AlphaC007/trump-thesis-lab/actions/runs/22428839487
-- Most recent run #2: success (schedule) · 2026-02-25T14:44:07Z · https://github.com/AlphaC007/trump-thesis-lab/actions/runs/22401814191
+- Most recent run #1: success (schedule) · 2026-02-26T14:39:38Z · https://github.com/AlphaC007/trump-thesis-lab/actions/runs/22446845108
+- Most recent run #2: success (schedule) · 2026-02-26T08:03:24Z · https://github.com/AlphaC007/trump-thesis-lab/actions/runs/22433230135
 - Upstream APIs: CoinGecko/DexScreener normal; on-chain may trigger fallback.
 
 ## 2) Data Delta
-- as_of_utc: 2026-02-26T05:12:53Z
-- price_usd: 3.5
+- as_of_utc: 2026-02-26T14:39:44Z
+- price_usd: 3.51
 - top10_holder_pct: 99.0
 - scenario_probabilities: Bull 0.38, Base 0.51, Stress 0.11
-- Probability drift: Bull +0.0225, Base +0.0525, Stress -0.0750
+- Probability drift: Bull +0.0000, Base +0.0000, Stress +0.0000
 
 ## 3) Falsification Radar
 - Trigger A: Data blind spot (missing real-time exchange netflow field)
