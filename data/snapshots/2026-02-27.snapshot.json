@@ -1,32 +1,32 @@
 {
-  "as_of_utc": "2026-02-27T07:59:52Z",
+  "as_of_utc": "2026-02-27T14:10:06Z",
   "asset": "TRUMP",
   "market": {
-    "price_usd": 3.42,
-    "mcap_usd": 794178614.4995956,
-    "volume_24h_usd": 101034455.70340988,
-    "liquidity_usd": 13540445.01,
-    "fdv_usd": 3419119219.0,
-    "buys_24h": 1896.0,
-    "sells_24h": 1910.0,
-    "buy_sell_txn_ratio_24h": 0.9927
+    "price_usd": 3.37,
+    "mcap_usd": 784387044.807737,
+    "volume_24h_usd": 104581317.44037817,
+    "liquidity_usd": 13375516.06,
+    "fdv_usd": 3374990903.0,
+    "buys_24h": 2224.0,
+    "sells_24h": 2540.0,
+    "buy_sell_txn_ratio_24h": 0.8756
   },
   "onchain": {
-    "top10_holder_pct": 99.0,
-    "top10_holder_source": "heuristic-proxy",
+    "top10_holder_pct": 98.5,
+    "top10_holder_source": "moralis-enhanced-proxy",
     "dex_depth_2pct_usd": null,
     "exchange_inflow_usd_24h": null,
     "exchange_outflow_usd_24h": null
   },
   "derived": {
-    "liq_fdv_ratio": 0.00396,
-    "liquidity_change_24h": 0.096922,
-    "price_change_24h_pct": -2.37
+    "liq_fdv_ratio": 0.003963,
+    "liquidity_change_24h": 0.083561,
+    "price_change_24h_pct": -4.02
   },
   "scenario_probabilities": {
-    "Bull": 0.38,
-    "Base": 0.51,
-    "Stress": 0.11
+    "Bull": 0.3908,
+    "Base": 0.5077,
+    "Stress": 0.1015
   },
   "risk_flags": [
     {
@@ -34,23 +34,22 @@
       "triggered": true,
       "severity": "medium",
       "evidence": [
-        "source:heuristic-proxy"
+        "source:moralis-enhanced-proxy"
       ]
     },
     {
-      "id": "using_heuristic_proxy",
+      "id": "using_moralis_enhanced_proxy",
       "triggered": true,
-      "severity": "medium",
+      "severity": "low",
       "evidence": [
-        "source:heuristic-proxy",
-        "formula:top10=100-((liq/fdv)*100*1.5)"
+        "source:moralis-enhanced-proxy"
       ]
     }
   ],
   "sources": [
     "coingecko",
     "dexscreener",
-    "heuristic-proxy"
+    "moralis-enhanced-proxy"
   ],
   "model": {
     "name": "scenario_prob_v1",
