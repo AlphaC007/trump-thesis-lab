@@ -196,15 +196,52 @@ def compute_top10_proxy(liquidity_usd: Optional[float], fdv_usd: Optional[float]
     return round(proxy, 4)
 
 
+def fetch_bitget_token_info() -> Optional[dict]:
+    """Fetch token info from Bitget Wallet API via subprocess."""
+    try:
+        import subprocess
+        # Use the bitget_api.py script from the skill
+        skill_script = Path.home() / ".openclaw/workspace/skills/bitget-wallet/scripts/bitget_api.py"
+        if not skill_script.exists():
+            return None
+        
+        result = subprocess.run(
+            ["python3", str(skill_script), "token-info", "--chain", "sol", "--contract", SOL_TOKEN_ADDRESS],
+            capture_output=True,
+            text=True,
+            timeout=30
+        )
+        if result.returncode == 0:
+            resp = json.loads(result.stdout)
+            if resp.get("status") == 0 and "data" in resp:
+                return resp["data"]
+    except Exception:
+        pass
+    return None
+
+
 def fetch_top10_holder_pct(liquidity_usd: Optional[float], fdv_usd: Optional[float]) -> tuple[Optional[float], str, bool, list[str]]:
     """
     Returns (top10_holder_pct, source_id, using_proxy, risk_flags).
     Fallback tree:
+      Tier 0: Bitget Wallet (real on-chain data)
       Tier 1: Solscan Pro hard truth
       Tier 2: Moralis trend proxy (holder stats)
       Tier 3: Heuristic proxy
     """
     flags: list[str] = []
+
+    # Tier 0: Bitget Wallet (real on-chain data)
+    try:
+        bitget_data = fetch_bitget_token_info()
+        if bitget_data:
+            top10_pct = to_float(bitget_data.get("top10_holder_percent"))
+            if top10_pct is not None:
+                # Bitget returns decimal (0.9137 = 91.37%), convert to percentage
+                top10_pct_normalized = top10_pct * 100 if top10_pct < 1.0 else top10_pct
+                return round(top10_pct_normalized, 4), "bitget-wallet", False, flags
+    except Exception:
+        flags.append("bitget_wallet_unavailable")
 
     # Tier 1: Solscan Pro hard truth
     try:
