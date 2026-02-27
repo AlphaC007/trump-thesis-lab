@@ -14,3 +14,7 @@ USER.md
 IDENTITY.md
 AGENTS.md
 .openclaw/
+
+# Social data: keep summaries, ignore raw tweet dumps
+data/social/*.json
+!data/social/*_summary.md

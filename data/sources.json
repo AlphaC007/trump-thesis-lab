@@ -29,6 +29,20 @@
       "type": "onchain",
       "url": "https://public-api.birdeye.so/",
       "trust_tier": "A"
+    },
+    {
+      "id": "x-social-gettrumpmemes",
+      "type": "social",
+      "url": "https://x.com/GetTrumpMemes",
+      "trust_tier": "B",
+      "notes": "Official $TRUMP meme account — scraped via CDP"
+    },
+    {
+      "id": "x-social-search-trump",
+      "type": "social",
+      "url": "https://x.com/search?q=$TRUMP",
+      "trust_tier": "C",
+      "notes": "Broad $TRUMP keyword search for community sentiment"
     }
   ]
 }

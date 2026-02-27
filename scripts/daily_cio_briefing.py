@@ -138,6 +138,11 @@ def main():
     )
     md.append("[CIO Deep Analysis: combine external macro and internal metrics to assess current Diamond Hands structural health]")
     md.append("")
+    # Social intelligence (auto-collected from CDP scraper)
+    md.append("### 📣 Social Intelligence")
+    md.append("[Auto-populated by scrape_social.py — @GetTrumpMemes activity, $TRUMP community buzz, Trump policy positive signals]")
+    md.append("[CIO Deep Analysis: interpret social engagement patterns as leading indicators of holder conviction and reflexive upside potential]")
+    md.append("")
     md.append("## ⚠️ 5. Actionable Insights")
     md.append("[CIO Deep Analysis: summarize 1-2 key risk points or high-probability tactical setups]")
 
