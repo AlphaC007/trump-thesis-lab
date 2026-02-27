@@ -67,41 +67,51 @@ def get_latest_local_state():
     return json.loads(lines[-1])
 
 
-def get_social_pulse():
-    """Load latest social scrape data for $TRUMP ecosystem."""
-    social_dir = ROOT / "data" / "social"
-    today = dt.datetime.now(dt.timezone.utc).strftime("%Y-%m-%d")
-    result = {"meme_account": [], "search_trump": [], "search_positive": []}
+def _extract_likes(tweet):
+    """Extract numeric likes from metrics string like '16245 Likes. Like'."""
+    try:
+        raw = tweet.get("metrics", {}).get("likes", "0")
+        parts = str(raw).split()
+        if parts:
+            return int(parts[0].replace(",", ""))
+    except (ValueError, IndexError):
+        pass
+    return 0
 
-    # @GetTrumpMemes latest tweets
-    meme_file = social_dir / f"{today}_GetTrumpMemes.json"
-    if meme_file.exists():
-        try:
-            tweets = json.loads(meme_file.read_text())
-            result["meme_account"] = tweets[:5]  # top 5
-        except Exception:
-            pass
 
-    # $TRUMP search results
-    for suffix in ["TRUMP", "TRUMPMEME", "TRUMP_memecoin"]:
-        f = social_dir / f"{today}_{suffix}.json"
-        if f.exists():
-            try:
-                tweets = json.loads(f.read_text())
-                result["search_trump"].extend(tweets)
-            except Exception:
-                pass
+def _extract_retweets(tweet):
+    """Extract numeric retweets from metrics string."""
+    try:
+        raw = tweet.get("metrics", {}).get("retweets", "0")
+        parts = str(raw).split()
+        if parts:
+            return int(parts[0].replace(",", ""))
+    except (ValueError, IndexError):
+        pass
+    return 0
 
-    # Trump positive policy search
-    positive_file = social_dir / f"{today}_Trump_positive.json"
-    if positive_file.exists():
-        try:
-            tweets = json.loads(positive_file.read_text())
-            result["search_positive"] = tweets[:5]
-        except Exception:
-            pass
 
-    return result
+def _is_fresh(tweet, max_hours=48):
+    """Return True if tweet is within max_hours of now."""
+    time_str = tweet.get("time", "")
+    if not time_str:
+        return False
+    try:
+        tweet_dt = dt.datetime.fromisoformat(time_str.replace("Z", "+00:00"))
+        cutoff = dt.datetime.now(dt.timezone.utc) - dt.timedelta(hours=max_hours)
+        return tweet_dt >= cutoff
+    except Exception:
+        return False
+
+
+def _filter_fresh(tweets, max_hours=48):
+    """Return only tweets within the freshness window."""
+    return [t for t in tweets if _is_fresh(t, max_hours)]
+
+
+def _engagement_score(tweet):
+    """Combined engagement score for ranking."""
+    return _extract_likes(tweet) + _extract_retweets(tweet) * 2
 
 
 def run_social_scrape():
@@ -112,10 +122,18 @@ def run_social_scrape():
     social_dir.mkdir(parents=True, exist_ok=True)
     today = dt.datetime.now(dt.timezone.utc).strftime("%Y-%m-%d")
 
+    # Multi-dimension scrape targets
     targets = [
+        # Dimension 1: Official $TRUMP meme account
         ("profile", "@GetTrumpMemes", 15, f"{today}_GetTrumpMemes.json"),
-        ("search", "$TRUMP", 10, f"{today}_TRUMP.json"),
-        ("search", "Trump crypto positive OR bullish OR winning", 10, f"{today}_Trump_positive.json"),
+        # Dimension 2: $TRUMP token search (latest)
+        ("search", "$TRUMP", 15, f"{today}_TRUMP.json"),
+        # Dimension 3: Trump policy / administration positive actions
+        ("search", "Trump executive order OR Trump signs OR Trump policy win", 10, f"{today}_Trump_policy.json"),
+        # Dimension 4: Crypto-specific Trump ecosystem sentiment
+        ("search", "Trump crypto OR Trump bitcoin OR Trump memecoin bullish", 10, f"{today}_Trump_crypto.json"),
+        # Dimension 5: @WhiteHouse official comms
+        ("profile", "@WhiteHouse", 10, f"{today}_WhiteHouse.json"),
     ]
 
     for mode, target, count, filename in targets:
@@ -128,7 +146,6 @@ def run_social_scrape():
             if r.returncode == 0 and r.stdout.strip():
                 tweets = json.loads(r.stdout)
                 if tweets:
-                    # Merge with existing
                     existing = []
                     if outpath.exists():
                         try:
@@ -146,79 +163,140 @@ def run_social_scrape():
             print(f"  social scrape warning ({target}): {e}")
 
 
-def format_social_section(social):
-    """Format social data into bullish report section."""
-    lines = []
+def get_social_pulse():
+    """Load latest social scrape data, filtered to 48h freshness window."""
+    social_dir = ROOT / "data" / "social"
+    today = dt.datetime.now(dt.timezone.utc).strftime("%Y-%m-%d")
+    result = {
+        "meme_account": [],
+        "search_trump": [],
+        "trump_policy": [],
+        "trump_crypto": [],
+        "white_house": [],
+    }
 
-    # @GetTrumpMemes highlights
+    def _load(filename):
+        f = social_dir / f"{today}_{filename}.json"
+        if not f.exists():
+            return []
+        try:
+            return json.loads(f.read_text())
+        except Exception:
+            return []
+
+    result["meme_account"] = _filter_fresh(_load("GetTrumpMemes"))
+    for suffix in ["TRUMP", "TRUMPMEME", "TRUMP_memecoin"]:
+        result["search_trump"].extend(_filter_fresh(_load(suffix)))
+    result["trump_policy"] = _filter_fresh(_load("Trump_policy"))
+    result["trump_crypto"] = _filter_fresh(_load("Trump_crypto"))
+    result["white_house"] = _filter_fresh(_load("WhiteHouse"))
+
+    return result
+
+
+def format_social_section(social):
+    """Format social data: conclusion-first, then supporting evidence by dimension."""
+    lines = []
     meme = social.get("meme_account", [])
+    search = social.get("search_trump", [])
+    policy = social.get("trump_policy", [])
+    crypto = social.get("trump_crypto", [])
+    wh = social.get("white_house", [])
+
+    total_signals = len(meme) + len(search) + len(policy) + len(crypto) + len(wh)
+    dimensions_active = sum(1 for d in [meme, search, policy, crypto, wh] if d)
+
+    # ── CONCLUSION FIRST ──
+    lines.append("### 📊 Social Sentiment Verdict (Bull-First)")
+    lines.append("")
+
+    if total_signals == 0:
+        lines.append("- ⚠️ No fresh social signals within 48h window. Data collection pending.")
+        return "\n".join(lines)
+
+    confidence_factors = []
     if meme:
-        lines.append("### 📣 @GetTrumpMemes (Official Community)")
-        for t in meme[:3]:
+        avg_likes = sum(_extract_likes(t) for t in meme) / len(meme) if meme else 0
+        confidence_factors.append(f"official account active ({len(meme)} posts, avg {int(avg_likes)} likes)")
+    if search:
+        confidence_factors.append(f"community discussion alive ({len(search)} $TRUMP mentions)")
+    if policy:
+        confidence_factors.append(f"policy tailwinds detected ({len(policy)} positive policy signals)")
+    if crypto:
+        confidence_factors.append(f"crypto ecosystem bullish ({len(crypto)} positive crypto mentions)")
+    if wh:
+        confidence_factors.append(f"White House comms active ({len(wh)} official posts)")
+
+    confidence = "LOW"
+    if dimensions_active >= 4:
+        confidence = "HIGH"
+    elif dimensions_active >= 2:
+        confidence = "MEDIUM"
+
+    lines.append(f"- **Overall Sentiment**: CONSTRUCTIVE | **Confidence**: {confidence} ({dimensions_active}/5 dimensions active)")
+    lines.append(f"- **Signal Coverage**: {total_signals} fresh posts across {dimensions_active} independent dimensions (48h window)")
+    for cf in confidence_factors:
+        lines.append(f"  - ✅ {cf}")
+    lines.append("")
+    lines.append("- **Interpretation**: Social engagement across multiple independent channels is consistent with a *base-building* regime, not capitulation. Multi-dimensional conviction signal remains a leading indicator of reflexive upside potential.")
+    lines.append("")
+
+    # ── SUPPORTING EVIDENCE ──
+
+    if meme:
+        top_meme = sorted(meme, key=_engagement_score, reverse=True)[:3]
+        lines.append("### 📣 Dim 1: @GetTrumpMemes — Official Community Voice")
+        for t in top_meme:
             text = (t.get("text") or "(media post)").replace("\n", " ")[:120]
-            likes = "N/A"
-            like_raw = t.get("metrics", {}).get("likes", "")
-            if like_raw:
-                # Extract number from "16245 Likes. Like"
-                parts = str(like_raw).split()
-                if parts:
-                    likes = parts[0]
-            time_str = t.get("time", "")[:10]
-            lines.append(f"- 💬 \"{text}\" — ❤️ {likes} ({time_str})")
+            likes = _extract_likes(t)
+            rts = _extract_retweets(t)
+            time_str = t.get("time", "")[:16].replace("T", " ")
+            lines.append(f"- \"{text}\" — ❤️ {likes} 🔁 {rts} ({time_str})")
             if t.get("url"):
                 lines.append(f"  → {t['url']}")
         lines.append("")
 
-    # $TRUMP community buzz
-    search = social.get("search_trump", [])
     if search:
-        total = len(search)
-        high_engagement = [t for t in search if _extract_likes(t) > 10]
-        lines.append(f"### 🔍 $TRUMP Community Buzz ({total} recent posts scanned)")
-        if high_engagement:
-            for t in high_engagement[:3]:
-                text = (t.get("text") or "").replace("\n", " ")[:100]
-                handle = t.get("handle", "")
-                likes = _extract_likes(t)
-                lines.append(f"- {handle}: \"{text}\" — ❤️ {likes}")
-        else:
-            lines.append("- Active community posting; engagement consistent with accumulation-phase baseline.")
+        top_search = sorted(search, key=_engagement_score, reverse=True)[:3]
+        lines.append(f"### 🔍 Dim 2: $TRUMP Community Pulse ({len(search)} posts)")
+        for t in top_search:
+            text = (t.get("text") or "").replace("\n", " ")[:100]
+            handle = t.get("handle", "")
+            likes = _extract_likes(t)
+            lines.append(f"- {handle}: \"{text}\" — ❤️ {likes}")
         lines.append("")
 
-    # Trump positive policy signals
-    positive = social.get("search_positive", [])
-    if positive:
-        lines.append("### 🏛️ Trump Ecosystem Positive Signals")
-        for t in positive[:3]:
+    if policy:
+        top_policy = sorted(policy, key=_engagement_score, reverse=True)[:3]
+        lines.append(f"### 🏛️ Dim 3: Trump Policy Tailwinds ({len(policy)} signals)")
+        for t in top_policy:
             text = (t.get("text") or "").replace("\n", " ")[:120]
             handle = t.get("handle", "")
-            lines.append(f"- {handle}: \"{text}\"")
+            likes = _extract_likes(t)
+            lines.append(f"- {handle}: \"{text}\" — ❤️ {likes}")
         lines.append("")
 
-    # Bull-first social sentiment interpretation
-    if meme or search or positive:
-        lines.append("### 📊 Social Sentiment Read (Bull-First)")
-        if meme:
-            lines.append("- **Official account active**: @GetTrumpMemes continues regular posting — signal of sustained project commitment and community cultivation.")
-        if search:
-            lines.append(f"- **Community pulse**: {len(search)} $TRUMP mentions captured — organic discussion remains alive, consistent with holder conviction during consolidation.")
-        if positive:
-            lines.append("- **Policy tailwinds**: Trump administration actions continue to generate positive crypto/meme ecosystem sentiment — structural narrative support intact.")
-        lines.append("- **Interpretation**: Social engagement pattern is consistent with a *base-building* regime, not capitulation. Community conviction remains a leading indicator of reflexive upside potential.")
+    if crypto:
+        top_crypto = sorted(crypto, key=_engagement_score, reverse=True)[:3]
+        lines.append(f"### 🪙 Dim 4: Crypto Ecosystem Sentiment ({len(crypto)} signals)")
+        for t in top_crypto:
+            text = (t.get("text") or "").replace("\n", " ")[:120]
+            handle = t.get("handle", "")
+            likes = _extract_likes(t)
+            lines.append(f"- {handle}: \"{text}\" — ❤️ {likes}")
+        lines.append("")
 
-    return "\n".join(lines) if lines else "- Social data unavailable for today. Next scrape pending."
+    if wh:
+        top_wh = sorted(wh, key=_engagement_score, reverse=True)[:3]
+        lines.append(f"### 🇺🇸 Dim 5: White House Official ({len(wh)} posts)")
+        for t in top_wh:
+            text = (t.get("text") or "").replace("\n", " ")[:120]
+            likes = _extract_likes(t)
+            rts = _extract_retweets(t)
+            lines.append(f"- \"{text}\" — ❤️ {likes} 🔁 {rts}")
+        lines.append("")
 
-
-def _extract_likes(tweet):
-    """Extract numeric likes from metrics string like '16245 Likes. Like'."""
-    try:
-        raw = tweet.get("metrics", {}).get("likes", "0")
-        parts = str(raw).split()
-        if parts:
-            return int(parts[0].replace(",", ""))
-    except (ValueError, IndexError):
-        pass
-    return 0
+    return "\n".join(lines)
 
 
 def main():

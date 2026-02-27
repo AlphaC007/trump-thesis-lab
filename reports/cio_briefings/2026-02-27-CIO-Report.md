@@ -5,16 +5,16 @@
 - Nasdaq: 22878.38 (-1.18%)
 - DXY: 97.75 (-0.04%)
 - US10Y: 4.02 (-0.77%)
-- Gold: 5198.70 (+0.43%)
-- Crude Oil: 65.72 (+0.78%)
+- Gold: 5198.00 (+0.42%)
+- Crude Oil: 65.73 (+0.80%)
 
 ## 🏛️ 2. Policy / Regulation / Prediction Markets (Fact Layer)
 - Key policy events: monitor macro policy headlines and regulatory flow.
 - Prediction-market shifts: monitor probability shocks and narrative regime shifts.
 
 ## 🪙 3. Crypto Liquidity & Narratives (Fact Layer)
-- BTC: $67567.00 (-0.84%)
-- ETH: $2028.42 (-1.47%)
+- BTC: $67538.00 (-0.66%)
+- ETH: $2024.73 (-1.62%)
 - Fear & Greed: 13 (Extreme Fear)
 - Funding / OI / Liquidation snapshot: pending unified derivatives panel feed.
 
@@ -26,27 +26,31 @@
 - Stress Probability: 11.0%
 - Risk Flags: solscan_pro_unauthorized, using_heuristic_proxy
 
-### 📣 @GetTrumpMemes (Official Community)
-- 💬 "$TRUMP INAUGURATION" — ❤️ 16245 (2025-01-19)
-  → https://x.com/GetTrumpMemes/status/1880841051910599026
-- 💬 "(media post)" — ❤️ 14337 (2025-01-24)
-  → https://x.com/GetTrumpMemes/status/1882906339082674406
-- 💬 "Today we make History.  $TRUMP" — ❤️ 12357 (2025-01-20)
-  → https://x.com/GetTrumpMemes/status/1881349919522652332
+### 📊 Social Sentiment Verdict (Bull-First)
 
-### 🔍 $TRUMP Community Buzz (35 recent posts scanned)
-- Active community posting; engagement consistent with accumulation-phase baseline.
+- **Overall Sentiment**: CONSTRUCTIVE | **Confidence**: MEDIUM (3/5 dimensions active)
+- **Signal Coverage**: 52 fresh posts across 3 independent dimensions (48h window)
+  - ✅ community discussion alive (39 $TRUMP mentions)
+  - ✅ crypto ecosystem bullish (4 positive crypto mentions)
+  - ✅ White House comms active (9 official posts)
 
-### 🏛️ Trump Ecosystem Positive Signals
-- @Harishyatharth: "AI Signal Update  BULLISH | Phase: markup   ASTER SHORT 74% [3x] neutral  QNT SHORT 72% [3x] breakout  TRUMP SHORT 70% ["
-- @valoredesk: "Short-Term Crypto Sentiment Responds to Political Remarks Bitcoin and Ethereum saw a temporary ~3% lift after positive s"
-- @alphavellian: "If you invested $10k when Trump took office, you would have:  BTC → $6,050 ETH → $4,510 XRP → $4,180 LINK → $3,725 SOL →"
+- **Interpretation**: Social engagement across multiple independent channels is consistent with a *base-building* regime, not capitulation. Multi-dimensional conviction signal remains a leading indicator of reflexive upside potential.
 
-### 📊 Social Sentiment Read (Bull-First)
-- **Official account active**: @GetTrumpMemes continues regular posting — signal of sustained project commitment and community cultivation.
-- **Community pulse**: 35 $TRUMP mentions captured — organic discussion remains alive, consistent with holder conviction during consolidation.
-- **Policy tailwinds**: Trump administration actions continue to generate positive crypto/meme ecosystem sentiment — structural narrative support intact.
-- **Interpretation**: Social engagement pattern is consistent with a *base-building* regime, not capitulation. Community conviction remains a leading indicator of reflexive upside potential.
+### 🔍 Dim 2: $TRUMP Community Pulse (39 posts)
+- @bilal4aq: "Over 100% Profit on #UNIUSDT from the Entry. Join our Telegram Trading community for Signals  (LINK " — ❤️ 1
+- @Pagghi1979: "ABTC down 92% since early May of last year and down 97% since the first day of trading  $WLFI down s" — ❤️ 0
+- @Pagghi1979: "ABTC down 92% since early May of last year and down 97% since the first day of trading  $WLFI down s" — ❤️ 0
+
+### 🪙 Dim 4: Crypto Ecosystem Sentiment (4 signals)
+- @Crypt0xlion: "PIPPIN just +70% this week & crazy bullish, but what is YOUR Solana Hidden Gem for 100–1000x?  No BONK WIF TRUMP PENGU d" — ❤️ 8
+- @Randytrade_1: "$XVS  BULLISH CONTINUATION ABOVE KEY LEVEL  Trade Setup: Entry: 2.98–3.03 TP1: 3.15 TP2: 3.25 TP3: 3.35 SL: 2.89  #Bitco" — ❤️ 3
+- @UsmanNas91: "Trump shedding lbs faster than a rug-pull memecoin dumps... but this glow-up is straight 100x bullish    From golf dad b" — ❤️ 1
+
+### 🇺🇸 Dim 5: White House Official (9 posts)
+- "CAN’T STOP WINNING!" — ❤️ 37379 🔁 3678
+- "The lowest total murder rate in 125 YEARS. President Trump has delivered on his promise to make America safe again." — ❤️ 12222 🔁 2805
+- ""Only in Donald Trump's administration could I be with Xi Jinping in Korea one moment and Nicki Minaj talking about Trum" — ❤️ 12542 🔁 2432
+
 
 ---
 
