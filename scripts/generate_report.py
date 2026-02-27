@@ -299,6 +299,22 @@ def format_social_section(social):
     return "\n".join(lines)
 
 
+def get_bitget_data():
+    """Fetch Bitget Wallet data (tx stats + security audit)."""
+    import subprocess
+    bitget_script = Path.home() / "projects-public" / "trump-thesis-lab" / "scripts" / "fetch_bitget_data.py"
+    try:
+        r = subprocess.run(
+            ["python3", str(bitget_script)],
+            capture_output=True, text=True, timeout=60,
+        )
+        if r.returncode == 0 and r.stdout.strip():
+            return json.loads(r.stdout)
+    except Exception as e:
+        print(f"Bitget data fetch failed (non-fatal): {e}")
+    return None
+
+
 def main():
     now = dt.datetime.now(dt.timezone(dt.timedelta(hours=8)))
     date_s = now.strftime("%Y-%m-%d")
@@ -310,6 +326,10 @@ def main():
     except Exception as e:
         print(f"Social scrape failed (non-fatal): {e}")
     social = get_social_pulse()
+    
+    # Fetch Bitget Wallet data (best-effort, non-blocking)
+    print("Fetching Bitget Wallet on-chain data...")
+    bitget = get_bitget_data()
 
     macro_map = {
         "S&P 500": "^GSPC",
@@ -396,6 +416,34 @@ def main():
     md.append(f"- Stress Probability: {round(stress*100,2) if isinstance(stress, (int, float)) else 'N/A'}%")
     md.append(f"- Risk Flags: {', '.join(flags) if flags else 'none'}")
     md.append("")
+    
+    # Bitget Wallet on-chain data
+    if bitget and bitget.get("data"):
+        bg_data = bitget["data"]
+        tx_stats = bg_data.get("trump_tx_stats", {})
+        security = bg_data.get("trump_security", {})
+        
+        if tx_stats:
+            md.append("### 📊 On-Chain Activity (Bitget Wallet)")
+            h24 = tx_stats.get("24h", {})
+            h1 = tx_stats.get("1h", {})
+            md.append(f"- 24h Volume: ${h24.get('volume', 0):,.0f}")
+            md.append(f"- 24h Buyers/Sellers: {h24.get('buyers', 0)}/{h24.get('sellers', 0)} (ratio: {h24.get('buyers', 0)/(h24.get('sellers', 1) or 1):.2f})")
+            md.append(f"- 1h Volume: ${h1.get('volume', 0):,.0f}")
+            md.append(f"- 1h Buyers/Sellers: {h1.get('buyers', 0)}/{h1.get('sellers', 0)}")
+            md.append("")
+        
+        if security:
+            safe = security.get("safe", False)
+            risk_count = security.get("risk_count", 0)
+            md.append("### 🛡️ Security Audit (Bitget Wallet)")
+            md.append(f"- Status: {'✅ SAFE' if safe else '⚠️ RISK DETECTED'}")
+            md.append(f"- Risk Count: {risk_count}")
+            md.append(f"- Buy/Sell Tax: {security.get('buy_tax', 0)}% / {security.get('sell_tax', 0)}%")
+            md.append(f"- Freeze Auth: {'Yes' if security.get('freeze_auth') else 'No'}")
+            md.append(f"- Mint Auth: {'Yes' if security.get('mint_auth') else 'No'}")
+            md.append("")
+    
     # Social intelligence sub-section
     social_section = format_social_section(social)
     md.append(social_section)
