@@ -227,17 +227,31 @@ def fetch_top10_holder_pct(liquidity_usd: Optional[float], fdv_usd: Optional[flo
     except (ApiNotFoundError, ApiNonRetryableError, ApiRetryableError):
         flags.append("solscan_pro_unavailable")
 
-    # Tier 2: Moralis trend proxy (stats endpoint)
+    # Tier 2: Moralis holder stats (real holder count + change trends)
     try:
         moralis_key = os.getenv("MORALIS_API_KEY")
         if moralis_key:
             stats = fetch_json(MORALIS_HOLDER_STATS_URL, headers={"X-API-Key": moralis_key})
-            # endpoint returns trend stats, not guaranteed top10 composition; use as confidence-enhancing proxy context
-            data = stats.get("data", {}) if isinstance(stats, dict) else {}
+            data = stats if isinstance(stats, dict) and "totalHolders" in stats else {}
             if data:
-                proxy = compute_top10_proxy(liquidity_usd, fdv_usd)
-                if proxy is not None:
-                    return proxy, "moralis-trend-proxy", True, flags + ["using_trend_proxy"]
+                total_holders = to_float(data.get("totalHolders"))
+                holder_change_24h = data.get("holderChange", {}).get("24h", {})
+                change_pct_24h = to_float(holder_change_24h.get("changePercent", 0))
+
+                # Enhanced proxy: use liquidity-based proxy as base,
+                # then adjust with real holder trend data to add variability.
+                # More holders leaving → concentration increases (fewer hands hold more)
+                # More holders joining → concentration decreases (distribution broadens)
+                base_proxy = compute_top10_proxy(liquidity_usd, fdv_usd)
+                if base_proxy is not None and total_holders is not None:
+                    # Holder dispersion factor: more holders = lower concentration
+                    # Baseline: 500k holders is "normal", adjust proportionally
+                    dispersion_adj = max(-2.0, min(2.0, (500000 - total_holders) / 200000))
+                    # 24h trend factor: holder exodus raises concentration
+                    trend_adj = max(-1.0, min(1.0, -(change_pct_24h or 0) * 50))
+                    adjusted = base_proxy + dispersion_adj + trend_adj
+                    adjusted = max(55.0, min(98.5, adjusted))  # cap at 98.5, not 99
+                    return round(adjusted, 4), "moralis-enhanced-proxy", True, flags + ["using_moralis_enhanced_proxy"]
     except (ApiUnauthorizedError, ApiNotFoundError, ApiNonRetryableError, ApiRetryableError):
         flags.append("moralis_stats_unavailable")
 
@@ -311,7 +325,21 @@ def calculate_scenario_probabilities(data: dict, rules: dict) -> Dict[str, float
         probs["Base"] += float(t["base_base"]) - float(t["base_penalty"]) * strength
         probs["Bull"] += float(t["bull_base"]) - float(t["bull_penalty"]) * strength
     else:
-        add_alloc(probs, mom_alloc["neutral"])
+        # Neutral zone: linear interpolation between stress_max and bull_min
+        # ratio closer to bull_min → lean bull; closer to stress_max → lean stress
+        neutral = mom_alloc["neutral"]
+        midpoint = (stress_max + bull_min) / 2.0
+        range_half = (bull_min - stress_max) / 2.0
+        if range_half > 0:
+            lean = clamp((buy_sell_ratio - midpoint) / range_half, -1.0, 1.0)
+        else:
+            lean = 0.0
+        # lean: -1.0 (bearish end) to +1.0 (bullish end)
+        # Shift up to ±0.04 between Bull and Stress within neutral allocation
+        shift = lean * 0.04
+        probs["Bull"] += float(neutral["bull"]) + shift
+        probs["Base"] += float(neutral["base"]) - abs(shift) * 0.5
+        probs["Stress"] += float(neutral["stress"]) - shift
 
     # 3) On-chain concentration (Diamond Hands defense)
     conc_cfg = rules["onchain_concentration"]
