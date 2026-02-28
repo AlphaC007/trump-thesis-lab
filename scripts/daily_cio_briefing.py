@@ -77,6 +77,46 @@ def get_local_trump_state():
     }
 
 
+def get_social_intelligence():
+    """Load latest social data from data/social/*.json"""
+    social_dir = ROOT / "data" / "social"
+    if not social_dir.exists():
+        return None
+    
+    # Find today's files
+    today = dt.datetime.utcnow().strftime("%Y-%m-%d")
+    files = sorted(social_dir.glob(f"{today}_*.json"))
+    
+    if not files:
+        return None
+    
+    all_tweets = []
+    for f in files:
+        try:
+            tweets = json.loads(f.read_text())
+            all_tweets.extend(tweets)
+        except (json.JSONDecodeError, Exception):
+            continue
+    
+    if not all_tweets:
+        return None
+    
+    # Parse likes from string format "16245 Likes. Like" -> 16245
+    def parse_likes(tweet):
+        likes_str = tweet.get("metrics", {}).get("likes", "0")
+        if isinstance(likes_str, int):
+            return likes_str
+        # Extract number from "16245 Likes. Like"
+        try:
+            return int(likes_str.split()[0])
+        except (ValueError, IndexError):
+            return 0
+    
+    # Sort by engagement (likes) and take top 5
+    all_tweets.sort(key=parse_likes, reverse=True)
+    return all_tweets[:5]
+
+
 def main():
     now = dt.datetime.now(dt.timezone(dt.timedelta(hours=8)))
     date_s = now.strftime("%Y-%m-%d")
@@ -93,6 +133,7 @@ def main():
     cg = get_coingecko_prices()
     fg = get_fear_greed()
     trump = get_local_trump_state() or {}
+    social = get_social_intelligence()
 
     md = []
     md.append(f"# 📅 {date_s} Daily Cross-Market Briefing (CIO Internal)")
@@ -140,8 +181,26 @@ def main():
     md.append("")
     # Social intelligence (auto-collected from CDP scraper)
     md.append("### 📣 Social Intelligence")
-    md.append("[Auto-populated by scrape_social.py — @GetTrumpMemes activity, $TRUMP community buzz, Trump policy positive signals]")
-    md.append("[CIO Deep Analysis: interpret social engagement patterns as leading indicators of holder conviction and reflexive upside potential]")
+    if social:
+        md.append(f"**Top {len(social)} tweets by engagement (24h):**")
+        md.append("")
+        for i, tweet in enumerate(social, 1):
+            text = (tweet.get("text") or "(media only)")[:120]
+            likes_str = tweet.get("metrics", {}).get("likes", "?")
+            # Parse likes from "16245 Likes. Like" format
+            try:
+                likes = likes_str.split()[0] if isinstance(likes_str, str) else str(likes_str)
+            except (IndexError, AttributeError):
+                likes = "?"
+            url = tweet.get("url", "")
+            md.append(f"{i}. [{likes} ❤️] {text}")
+            if url:
+                md.append(f"   {url}")
+            md.append("")
+        md.append("[CIO Deep Analysis: interpret social engagement patterns as leading indicators of holder conviction and reflexive upside potential]")
+    else:
+        md.append("[Auto-populated by scrape_social.py — @GetTrumpMemes activity, $TRUMP community buzz, Trump policy positive signals]")
+        md.append("[CIO Deep Analysis: interpret social engagement patterns as leading indicators of holder conviction and reflexive upside potential]")
     md.append("")
     md.append("## ⚠️ 5. Actionable Insights")
     md.append("[CIO Deep Analysis: summarize 1-2 key risk points or high-probability tactical setups]")
