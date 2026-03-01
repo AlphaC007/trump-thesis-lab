@@ -1,32 +1,32 @@
 {
-  "as_of_utc": "2026-03-01T05:11:49Z",
+  "as_of_utc": "2026-03-01T07:48:12Z",
   "asset": "TRUMP",
   "market": {
-    "price_usd": 3.58,
-    "mcap_usd": 831190223.692131,
-    "volume_24h_usd": 180056736.00615212,
-    "liquidity_usd": 14093501.81,
-    "fdv_usd": 3580001000.0,
-    "buys_24h": 6169.0,
-    "sells_24h": 5523.0,
-    "buy_sell_txn_ratio_24h": 1.117
+    "price_usd": 3.55,
+    "mcap_usd": 825105890.0017682,
+    "volume_24h_usd": 168313968.5792654,
+    "liquidity_usd": 14013289.31,
+    "fdv_usd": 3562149671.0,
+    "buys_24h": 5749.0,
+    "sells_24h": 5055.0,
+    "buy_sell_txn_ratio_24h": 1.1373
   },
   "onchain": {
-    "top10_holder_pct": 98.0807,
+    "top10_holder_pct": 98.0556,
     "top10_holder_source": "moralis-enhanced-proxy",
     "dex_depth_2pct_usd": null,
     "exchange_inflow_usd_24h": null,
     "exchange_outflow_usd_24h": null
   },
   "derived": {
-    "liq_fdv_ratio": 0.003937,
-    "liquidity_change_24h": 0.089302,
-    "price_change_24h_pct": 6.07
+    "liq_fdv_ratio": 0.003934,
+    "liquidity_change_24h": 0.083103,
+    "price_change_24h_pct": 7.25
   },
   "scenario_probabilities": {
-    "Bull": 0.5145,
-    "Base": 0.3938,
-    "Stress": 0.0917
+    "Bull": 0.5157,
+    "Base": 0.3927,
+    "Stress": 0.0916
   },
   "risk_flags": [
     {
