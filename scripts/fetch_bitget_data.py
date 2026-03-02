@@ -14,7 +14,7 @@ from datetime import datetime
 BITGET_INTEGRATION = Path.home() / ".openclaw/workspace/tools/bitget_integration.py"
 
 def fetch_trump_stats():
-    """Fetch TRUMP token 交易统计"""
+    """Fetch TRUMP token transaction statistics"""
     cmd = ["python3", str(BITGET_INTEGRATION), "tx-stats", "sol", "6p6xgHyF7AeE6TZkSmFsko444wqoP15icUSqi2jfGiPN"]
     result = subprocess.run(cmd, capture_output=True, text=True)
     if result.returncode != 0:
@@ -22,7 +22,7 @@ def fetch_trump_stats():
     return json.loads(result.stdout)
 
 def fetch_trump_security():
-    """Fetch TRUMP token 安全审计"""
+    """Fetch TRUMP token security audit"""
     cmd = ["python3", str(BITGET_INTEGRATION), "security", "sol", "6p6xgHyF7AeE6TZkSmFsko444wqoP15icUSqi2jfGiPN"]
     result = subprocess.run(cmd, capture_output=True, text=True)
     if result.returncode != 0:
@@ -30,7 +30,7 @@ def fetch_trump_security():
     return json.loads(result.stdout)
 
 def fetch_portfolio_prices():
-    """批量Fetch投资组合价格（TRUMP + SOL + BTC + ETH）"""
+    """Batch fetch portfolio prices (TRUMP + SOL + BTC + ETH)"""
     tokens = "sol:6p6xgHyF7AeE6TZkSmFsko444wqoP15icUSqi2jfGiPN,sol:,btc:,eth:"
     cmd = ["python3", str(BITGET_INTEGRATION), "batch-prices", tokens]
     result = subprocess.run(cmd, capture_output=True, text=True)
