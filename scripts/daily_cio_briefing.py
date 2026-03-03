@@ -84,7 +84,7 @@ def get_social_intelligence():
         return None
     
     # Find today's files
-    today = dt.datetime.utcnow().strftime("%Y-%m-%d")
+    today = dt.datetime.now(dt.timezone.utc).strftime("%Y-%m-%d")
     files = sorted(social_dir.glob(f"{today}_*.json"))
     
     if not files:
@@ -94,7 +94,8 @@ def get_social_intelligence():
     for f in files:
         try:
             tweets = json.loads(f.read_text())
-            all_tweets.extend(tweets)
+            if isinstance(tweets, list):
+                all_tweets.extend(tweets)
         except (json.JSONDecodeError, Exception):
             continue
     
