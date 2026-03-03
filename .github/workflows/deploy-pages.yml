@@ -35,6 +35,9 @@ jobs:
           mkdir -p docs/cio-reports
           cp reports/cio_briefings/$(ls -t reports/cio_briefings/*.md | head -1) docs/cio-reports/latest.md
 
+      - name: Build trend dataset
+        run: python scripts/build_trend_data.py
+
       - name: Build MkDocs site
         run: mkdocs build
 

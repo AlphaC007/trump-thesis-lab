@@ -1,0 +1,252 @@
+{
+  "generated_at_utc": "2026-03-03T22:28:07.224779Z",
+  "count": 41,
+  "points": [
+    {
+      "ts": "2026-02-20T12:26:10Z",
+      "price_usd": 3.67,
+      "top10_holder_pct": 98.7576,
+      "bull_probability_pct": 51.48
+    },
+    {
+      "ts": "2026-02-20T12:27:01Z",
+      "price_usd": 3.67,
+      "top10_holder_pct": 98.7576,
+      "bull_probability_pct": 51.47
+    },
+    {
+      "ts": "2026-02-20T12:35:10Z",
+      "price_usd": 3.65,
+      "top10_holder_pct": 98.7576,
+      "bull_probability_pct": 51.48
+    },
+    {
+      "ts": "2026-02-20T12:36:04Z",
+      "price_usd": 3.65,
+      "top10_holder_pct": 98.7567,
+      "bull_probability_pct": 51.46
+    },
+    {
+      "ts": "2026-02-20T12:36:46Z",
+      "price_usd": 3.65,
+      "top10_holder_pct": 98.7568,
+      "bull_probability_pct": 51.45
+    },
+    {
+      "ts": "2026-02-20T12:52:58Z",
+      "price_usd": 3.64,
+      "top10_holder_pct": 98.7571,
+      "bull_probability_pct": 51.58
+    },
+    {
+      "ts": "2026-02-20T12:54:24Z",
+      "price_usd": 3.64,
+      "top10_holder_pct": 98.7567,
+      "bull_probability_pct": 51.55
+    },
+    {
+      "ts": "2026-02-20T14:06:50Z",
+      "price_usd": 3.49,
+      "top10_holder_pct": 98.7567,
+      "bull_probability_pct": 38.0
+    },
+    {
+      "ts": "2026-02-21T04:53:37Z",
+      "price_usd": 3.53,
+      "top10_holder_pct": 98.7561,
+      "bull_probability_pct": 38.0
+    },
+    {
+      "ts": "2026-02-21T13:54:29Z",
+      "price_usd": 3.52,
+      "top10_holder_pct": 98.7559,
+      "bull_probability_pct": 38.0
+    },
+    {
+      "ts": "2026-02-22T05:13:54Z",
+      "price_usd": 3.44,
+      "top10_holder_pct": 98.7559,
+      "bull_probability_pct": 38.0
+    },
+    {
+      "ts": "2026-02-22T13:55:45Z",
+      "price_usd": 3.37,
+      "top10_holder_pct": 98.7556,
+      "bull_probability_pct": 38.0
+    },
+    {
+      "ts": "2026-02-23T05:22:19Z",
+      "price_usd": 3.25,
+      "top10_holder_pct": 98.7537,
+      "bull_probability_pct": 38.0
+    },
+    {
+      "ts": "2026-02-23T08:06:24Z",
+      "price_usd": 3.28,
+      "top10_holder_pct": 98.7531,
+      "bull_probability_pct": 38.0
+    },
+    {
+      "ts": "2026-02-23T14:37:49Z",
+      "price_usd": 3.37,
+      "top10_holder_pct": 98.754,
+      "bull_probability_pct": 38.0
+    },
+    {
+      "ts": "2026-02-24T05:15:01Z",
+      "price_usd": 3.28,
+      "top10_holder_pct": 98.7533,
+      "bull_probability_pct": 38.0
+    },
+    {
+      "ts": "2026-02-24T08:04:51Z",
+      "price_usd": 3.25,
+      "top10_holder_pct": 98.7532,
+      "bull_probability_pct": 38.0
+    },
+    {
+      "ts": "2026-02-24T15:11:07Z",
+      "price_usd": 3.34,
+      "top10_holder_pct": 98.758,
+      "bull_probability_pct": 38.0
+    },
+    {
+      "ts": "2026-02-25T05:17:27Z",
+      "price_usd": 3.4,
+      "top10_holder_pct": 99.0,
+      "bull_probability_pct": 35.75
+    },
+    {
+      "ts": "2026-02-25T08:06:41Z",
+      "price_usd": 3.4,
+      "top10_holder_pct": 99.0,
+      "bull_probability_pct": 35.75
+    },
+    {
+      "ts": "2026-02-25T14:44:14Z",
+      "price_usd": 3.48,
+      "top10_holder_pct": 99.0,
+      "bull_probability_pct": 35.75
+    },
+    {
+      "ts": "2026-02-26T05:12:53Z",
+      "price_usd": 3.5,
+      "top10_holder_pct": 99.0,
+      "bull_probability_pct": 38.0
+    },
+    {
+      "ts": "2026-02-26T08:03:32Z",
+      "price_usd": 3.5,
+      "top10_holder_pct": 99.0,
+      "bull_probability_pct": 38.0
+    },
+    {
+      "ts": "2026-02-26T14:39:44Z",
+      "price_usd": 3.51,
+      "top10_holder_pct": 99.0,
+      "bull_probability_pct": 38.0
+    },
+    {
+      "ts": "2026-02-27T05:06:18Z",
+      "price_usd": 3.43,
+      "top10_holder_pct": 99.0,
+      "bull_probability_pct": 38.0
+    },
+    {
+      "ts": "2026-02-27T07:59:52Z",
+      "price_usd": 3.42,
+      "top10_holder_pct": 99.0,
+      "bull_probability_pct": 38.0
+    },
+    {
+      "ts": "2026-02-27T14:10:06Z",
+      "price_usd": 3.37,
+      "top10_holder_pct": 98.5,
+      "bull_probability_pct": 39.08
+    },
+    {
+      "ts": "2026-02-27T22:55:18Z",
+      "price_usd": 3.38,
+      "top10_holder_pct": 99.0,
+      "bull_probability_pct": 41.42
+    },
+    {
+      "ts": "2026-02-27T22:56:12Z",
+      "price_usd": 3.38,
+      "top10_holder_pct": 91.3702,
+      "bull_probability_pct": 41.41
+    },
+    {
+      "ts": "2026-02-28T07:04:52Z",
+      "price_usd": 3.25,
+      "top10_holder_pct": 97.7158,
+      "bull_probability_pct": 40.73
+    },
+    {
+      "ts": "2026-02-28T13:48:17Z",
+      "price_usd": 3.26,
+      "top10_holder_pct": 98.081,
+      "bull_probability_pct": 42.22
+    },
+    {
+      "ts": "2026-03-01T05:11:49Z",
+      "price_usd": 3.58,
+      "top10_holder_pct": 98.0807,
+      "bull_probability_pct": 51.45
+    },
+    {
+      "ts": "2026-03-01T07:48:12Z",
+      "price_usd": 3.55,
+      "top10_holder_pct": 98.0556,
+      "bull_probability_pct": 51.57
+    },
+    {
+      "ts": "2026-03-01T13:50:48Z",
+      "price_usd": 3.45,
+      "top10_holder_pct": 97.9157,
+      "bull_probability_pct": 51.08
+    },
+    {
+      "ts": "2026-03-02T05:08:09Z",
+      "price_usd": 3.42,
+      "top10_holder_pct": 98.2813,
+      "bull_probability_pct": 38.1
+    },
+    {
+      "ts": "2026-03-02T08:00:39Z",
+      "price_usd": 3.41,
+      "top10_holder_pct": 98.5,
+      "bull_probability_pct": 37.88
+    },
+    {
+      "ts": "2026-03-02T14:29:32Z",
+      "price_usd": 3.43,
+      "top10_holder_pct": 98.5,
+      "bull_probability_pct": 39.37
+    },
+    {
+      "ts": "2026-03-03T05:06:52Z",
+      "price_usd": 3.45,
+      "top10_holder_pct": 97.9956,
+      "bull_probability_pct": 51.07
+    },
+    {
+      "ts": "2026-03-03T07:57:02Z",
+      "price_usd": 3.47,
+      "top10_holder_pct": 97.7655,
+      "bull_probability_pct": 51.16
+    },
+    {
+      "ts": "2026-03-03T14:31:31Z",
+      "price_usd": 3.39,
+      "top10_holder_pct": 97.9957,
+      "bull_probability_pct": 41.15
+    },
+    {
+      "ts": "2026-03-03T15:03:18Z",
+      "price_usd": 3.38,
+      "top10_holder_pct": 91.4985,
+      "bull_probability_pct": 39.8
+    }
+  ]
+}
