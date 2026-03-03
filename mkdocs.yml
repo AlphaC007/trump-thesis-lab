@@ -1,10 +1,10 @@
 site_name: The $TRUMP Thesis Lab
-site_url: https://alphac007.github.io/trump-thesis-lab/
+site_url: https://alphac007.github.io/trump-3x-fight/
 site_description: Data-driven conviction. Bull-First framework. Fight Fight Fight.
 site_author: The $TRUMP Thesis Lab
 
-repo_name: AlphaC007/trump-thesis-lab
-repo_url: https://github.com/AlphaC007/trump-thesis-lab
+repo_name: AlphaC007/trump-3x-fight
+repo_url: https://github.com/AlphaC007/trump-3x-fight
 
 theme:
   name: material
