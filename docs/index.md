@@ -1,4 +1,4 @@
-# 🇺🇸 The $TRUMP Thesis Lab
+# The $TRUMP Thesis Lab
 
 <div class="hero-shell">
   <div class="hero-kicker">THE OFFICIAL BULL-FIRST INTELLIGENCE LAB</div>
@@ -18,7 +18,7 @@ This is not financial advice. This is a **movement**.
 
 ---
 
-## 📈 Trend Analysis (Live)
+## Trend Analysis (Live)
 
 We track price structure, Bull Probability, and holder concentration in real time.
 
@@ -67,7 +67,7 @@ We track price structure, Bull Probability, and holder concentration in real tim
 
 ---
 
-## 🎯 Our Mission
+## Our Mission
 
 The $TRUMP Thesis Lab combines:
 
@@ -80,7 +80,7 @@ We don't hide bad news. We contextualize it. We don't chase pumps. We build conv
 
 ---
 
-## 📊 Today's Snapshot
+## Today's Snapshot
 
 Latest CIO Report: [CIO Intelligence Hub](cio-reports/latest.md)
 
@@ -92,7 +92,7 @@ Latest CIO Report: [CIO Intelligence Hub](cio-reports/latest.md)
 
 ---
 
-## 🔥 Fight Fight Fight
+## Fight Fight Fight
 
 This project is built on three pillars:
 
@@ -102,7 +102,7 @@ This project is built on three pillars:
 
 ---
 
-## 🚀 What's Next?
+## What's Next?
 
 - **Daily CIO Reports**: Updated every morning (Asia/Shanghai timezone)
 - **Trend Intelligence**: Structure shifts, momentum, and regime transitions
@@ -110,7 +110,7 @@ This project is built on three pillars:
 
 ---
 
-## 🤖 For Agents
+## For Agents
 
 We provide a dedicated machine-readable entrypoint so AI agents can quickly understand and verify this project.
 
@@ -120,7 +120,7 @@ We provide a dedicated machine-readable entrypoint so AI agents can quickly unde
 
 ---
 
-## 💪 Join the Movement
+## Join the Movement
 
 We are not here to predict the future. We are here to **build it**.
 
