@@ -54,10 +54,10 @@
 ---
 
 ## Transparency & Falsification
-- Trigger A status: {{TRIGGER_A_STATUS}}
-- Trigger B status: {{TRIGGER_B_STATUS}}
-- Trigger C status: {{TRIGGER_C_STATUS}}
-- Notes on proxy/fallback usage: {{PROXY_NOTES}}
+- Trigger A (whale-to-exchange inflow spike): {{TRIGGER_A_STATUS}}
+- Trigger B (orderbook depth shock): {{TRIGGER_B_STATUS}}
+- Trigger C (holder concentration decay): {{TRIGGER_C_STATUS}}
+- Concentration quality / confidence mode: {{PROXY_NOTES}}
 
 ## Human Value Note
 - Beyond positions and probabilities, this system is built to preserve what matters most: dignity, care, and gratitude for those who gave us life.
