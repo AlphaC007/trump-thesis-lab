@@ -8,6 +8,7 @@
   <button id="btn-raw" style="padding: 6px 12px; border: 1px solid #888; border-radius: 6px; cursor: pointer;">Raw snapshots</button>
 </div>
 
+<div id="trend-highlights" style="margin: 10px 0 14px 0; padding: 10px 12px; border: 1px solid #ddd; border-radius: 8px;"></div>
 <div id="trend-chart" style="width: 100%; height: 520px;"></div>
 <div id="trend-status" style="margin-top: 12px; opacity: 0.8;"></div>
 
@@ -18,6 +19,7 @@
   const container = document.getElementById('trend-chart');
   const btnDaily = document.getElementById('btn-daily');
   const btnRaw = document.getElementById('btn-raw');
+  const highlightsEl = document.getElementById('trend-highlights');
 
   if (!container || !window.echarts) {
     if (statusEl) statusEl.textContent = 'Chart init failed: local ECharts not loaded.';
@@ -28,6 +30,42 @@
 
   function fmtNum(v, digits = 2) {
     return (v === null || v === undefined) ? 'N/A' : Number(v).toFixed(digits);
+  }
+
+  function pctChange(start, end) {
+    if (start === null || end === null || start === undefined || end === undefined || Number(start) === 0) return null;
+    return ((Number(end) - Number(start)) / Number(start)) * 100;
+  }
+
+  function renderHighlights(raw, daily) {
+    if (!highlightsEl) return;
+    const src = daily.length ? daily : raw;
+    if (!src.length) {
+      highlightsEl.textContent = 'No highlights available yet.';
+      return;
+    }
+
+    const latest = src[src.length - 1] || {};
+    const weekBack = src[Math.max(0, src.length - 8)] || src[0] || {};
+
+    const priceChange7d = pctChange(weekBack.price_usd, latest.price_usd);
+    const bullChange7d = pctChange(weekBack.bull_probability_pct, latest.bull_probability_pct);
+
+    const allPrices = src.map(p => p.price_usd).filter(v => v !== null && v !== undefined);
+    const allBull = src.map(p => p.bull_probability_pct).filter(v => v !== null && v !== undefined);
+
+    const minPrice = allPrices.length ? Math.min(...allPrices) : null;
+    const maxPrice = allPrices.length ? Math.max(...allPrices) : null;
+    const minBull = allBull.length ? Math.min(...allBull) : null;
+    const maxBull = allBull.length ? Math.max(...allBull) : null;
+
+    highlightsEl.innerHTML = `
+      <strong>Trend Highlights</strong><br/>
+      • 7D Price Change: <b>${priceChange7d === null ? 'N/A' : fmtNum(priceChange7d) + '%'}</b> &nbsp; | &nbsp;
+      7D Bull Probability Change: <b>${bullChange7d === null ? 'N/A' : fmtNum(bullChange7d) + '%'}</b><br/>
+      • Price Range (window): <b>$${fmtNum(minPrice)} → $${fmtNum(maxPrice)}</b><br/>
+      • Bull Probability Range (window): <b>${fmtNum(minBull)}% → ${fmtNum(maxBull)}%</b>
+    `;
   }
 
   function render(seriesName, points, isDaily) {
@@ -103,6 +141,8 @@
       statusEl.textContent = 'No trend data available yet.';
       return;
     }
+
+    renderHighlights(raw, daily);
 
     // default: daily
     const initial = daily.length ? daily : raw;
