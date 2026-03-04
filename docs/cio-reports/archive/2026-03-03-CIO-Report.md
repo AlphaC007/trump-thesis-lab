@@ -26,7 +26,7 @@
 - Stress Probability: 8.43%
 - Risk Flags: none
 
-### 📈 On-Chain Data (OKX OnChainOS - Primary)
+### 📈 On-Chain Data (Primary Feed)
 - Price: $3.3928
 - 24h Volume: $19,869,219
 - Market Cap: $788,814,735
@@ -35,13 +35,13 @@
 - 24h Txs: 24,258
 - Price Change: 1h +0.40% | 24h -1.06%
 
-### 📊 On-Chain Activity (Bitget Wallet - Backup)
+### 📊 On-Chain Activity (Secondary Feed)
 - 24h Volume: $4,372,963
 - 24h Buyers/Sellers: 1038/1089 (ratio: 0.95)
 - 1h Volume: $66,925
 - 1h Buyers/Sellers: 69/61
 
-### 🛡️ Security Audit (Bitget Wallet)
+### 🛡️ Security Audit (Secondary Feed)
 - Status: ✅ SAFE
 - Risk Count: 0
 - Buy/Sell Tax: 0% / 0%
@@ -110,11 +110,11 @@ Invalidate bull bias if Trigger A (4H whale-to-exchange net inflow >5% liquidity
 ---
 
 ## Transparency & Falsification
-- Trigger A status: not confirmed
-- Trigger B status: not confirmed
-- Trigger C status: not confirmed
-- Data source: Real on-chain data (OKX OnChainOS + Bitget Wallet)
-- Confidence: Full confidence in concentration metrics
+- Trigger A (whale-to-exchange inflow spike): not confirmed
+- Trigger B (orderbook depth shock): not confirmed
+- Trigger C (holder concentration decay): not confirmed
+- Concentration quality: direct on-chain holder feed available
+- Confidence mode: standard
 
 ## Human Value Note
 - Beyond positions and probabilities, this system is built to preserve what matters most: dignity, care, and gratitude for those who gave us life.

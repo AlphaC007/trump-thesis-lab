@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 import datetime as dt
 import json
+import re
 from pathlib import Path
 
 import requests
@@ -114,6 +115,39 @@ def _engagement_score(tweet):
     return _extract_likes(tweet) + _extract_retweets(tweet) * 2
 
 
+_SPAM_PATTERNS = [
+    r"t\.me/",
+    r"telegram",
+    r"join\s+my\s+channel",
+    r"whatsapp",
+    r"signal\s*group",
+    r"airdrop",
+    r"presale",
+    r"100x",
+    r"guaranteed",
+    r"free\s+btc",
+    r"dm\s+for\s+signals",
+]
+
+
+def _is_low_quality_social(tweet) -> bool:
+    """Filter obvious scam/spam promo content from social evidence."""
+    text = (tweet.get("text") or "").lower()
+    url = (tweet.get("url") or "").lower()
+    handle = (tweet.get("handle") or "").lower()
+    blob = f"{text}\n{url}\n{handle}"
+
+    for pat in _SPAM_PATTERNS:
+        if re.search(pat, blob):
+            return True
+
+    # Very low-quality shill pattern: huge promo text + zero engagement
+    if len(text) > 60 and _engagement_score(tweet) == 0 and ("signal" in text or "profit" in text):
+        return True
+
+    return False
+
+
 def run_social_scrape():
     """Run social scraper to collect fresh data before report generation."""
     import subprocess
@@ -221,10 +255,11 @@ def get_social_pulse(max_hours=72):
                 except Exception as e:
                     print(f"Warning: failed to load {fp.name}: {e}")
 
-        # Keep only fresh signals
+        # Keep only fresh + non-spam signals
         fresh = _filter_fresh(merged, max_hours=max_hours)
-        fresh.sort(key=lambda t: t.get("time", ""), reverse=True)
-        result[key] = fresh
+        clean = [t for t in fresh if not _is_low_quality_social(t)]
+        clean.sort(key=lambda t: t.get("time", ""), reverse=True)
+        result[key] = clean
 
     return result, source_files
 

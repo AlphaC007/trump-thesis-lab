@@ -96,12 +96,16 @@ def _build_summary(reports: list[Path]) -> tuple[str, list[str]]:
     return paragraph, bullets
 
 
-def _build_archive_links(reports: list[Path]) -> list[str]:
+def _build_archive_links(reports: list[Path]) -> tuple[list[str], list[str]]:
     links = []
     for rp in sorted(reports, key=lambda p: p.name, reverse=True):
         date = DATE_RE.match(rp.name).group(1)
         links.append(f"- [{date} CIO Report](archive/{rp.name})")
-    return links
+
+    # show latest 6 directly, rest under expandable "More"
+    head = links[:6]
+    tail = links[6:]
+    return head, tail
 
 
 def main() -> None:
@@ -114,7 +118,7 @@ def main() -> None:
 
     latest_text = reports[-1].read_text(encoding="utf-8", errors="ignore").strip()
     summary_para, summary_bullets = _build_summary(reports)
-    archive_links = _build_archive_links(reports)
+    archive_head, archive_tail = _build_archive_links(reports)
 
     generated_at = datetime.now(timezone.utc).strftime("%Y-%m-%d %H:%M UTC")
 
@@ -137,7 +141,15 @@ def main() -> None:
     hub.append("")
     hub.append("## Historical CIO Reports")
     hub.append("")
-    hub.extend(archive_links)
+    hub.extend(archive_head)
+    if archive_tail:
+        hub.append("")
+        hub.append("<details>")
+        hub.append(f"<summary>More ({len(archive_tail)} older reports)</summary>")
+        hub.append("")
+        hub.extend(archive_tail)
+        hub.append("")
+        hub.append("</details>")
     hub.append("")
     hub.append(f"_Hub generated automatically at {generated_at}_")
 

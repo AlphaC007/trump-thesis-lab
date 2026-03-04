@@ -60,9 +60,9 @@ Invalidate bull bias if Trigger A (4H whale-to-exchange net inflow >5% liquidity
 ---
 
 ## Transparency & Falsification
-- Trigger A status: not confirmed
-- Trigger B status: not confirmed
-- Trigger C status: not confirmed
+- Trigger A (whale-to-exchange inflow spike): not confirmed
+- Trigger B (orderbook depth shock): not confirmed
+- Trigger C (holder concentration decay): not confirmed
 - Proxy notes: if `using_heuristic_proxy` is active, confidence is adjusted downward but not ignored.
 
 ## Human Value Note
