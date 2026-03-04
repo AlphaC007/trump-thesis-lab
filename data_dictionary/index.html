@@ -600,7 +600,7 @@
 <li><code>market.volume_24h_usd</code>: 24h volume</li>
 <li><code>market.liquidity_usd</code>: aggregate liquidity proxy</li>
 <li><code>onchain.top10_holder_pct</code>: concentration ratio (top-10 holders / total supply)</li>
-<li><code>onchain.top10_holder_source</code>: data source id for concentration metric (<code>moralis</code>/<code>solscan</code>/<code>birdeye</code>/<code>solana-rpc</code>/<code>heuristic-proxy</code>)</li>
+<li><code>onchain.top10_holder_source</code>: data source id for concentration metric (<code>binance-web3</code>/<code>bitget-wallet</code>/<code>solscan-pro</code>/<code>moralis-enhanced-proxy</code>/<code>heuristic-proxy</code>)</li>
 <li>If holder endpoints are unavailable, system uses a transparent heuristic proxy model:</li>
 <li><code>top10_holder_pct_proxy = 100 - ((liquidity_usd / fdv_usd) * 100 * 1.5)</code></li>
 <li>with floor <code>55.0%</code> and cap <code>99.0%</code></li>
