@@ -14,7 +14,7 @@ Agent entry page: /for-agents/
 ## Data Guidance
 - Chart-ready dataset: `docs/assets/data/trends.json` (published at `/assets/data/trends.json`).
 - Historical append-only series: `data/timeseries.jsonl`.
-- Integrity index: `data/manifest.json`.
+- Integrity index: `/data/manifest.json` (repo file: `data/manifest.json`).
 - Reproduction guide: `REPRODUCE.md`.
 - Use scenario + methodology pages for interpretation boundaries.
 

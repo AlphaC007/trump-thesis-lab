@@ -1,0 +1,26 @@
+{
+  "project": "trump-thesis-lab",
+  "manifest_version": "1.0.0",
+  "generated_at_utc": "2026-03-04T21:39:29Z",
+  "latest_snapshot_date": "2026-03-04",
+  "pipeline_version": "v1.0.0-Stable-RAG",
+  "artifacts": {
+    "snapshot": {
+      "path": "data/snapshots/2026-03-04.snapshot.json",
+      "sha256": "8f2295c158861cbbd9727a754985912ec022cbd539dbe4260a99c58e2aade49e"
+    },
+    "trends_dataset": {
+      "path": "docs/assets/data/trends.json",
+      "sha256": "fc1f648b7326f417d3a195272bd924e93cfcc329c298861e2fb70245f0b246d8"
+    },
+    "cio_report": {
+      "path": "reports/cio_briefings/2026-03-04-CIO-Report.md",
+      "sha256": "28fde5278aadfcee49a1c3b7c4c6ae447999a9cb50d93733d72132d4c511a8e3"
+    }
+  },
+  "source_priority": [
+    "binance-web3",
+    "okx-onchainos",
+    "bitget-wallet"
+  ]
+}
