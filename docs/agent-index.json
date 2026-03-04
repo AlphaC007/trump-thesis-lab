@@ -1,0 +1,17 @@
+{
+  "name": "The $TRUMP Thesis Lab",
+  "site": "https://alphac007.github.io/trump3fight/",
+  "agent_entry": "https://alphac007.github.io/trump3fight/for-agents/",
+  "llms": "https://alphac007.github.io/trump3fight/llms.txt",
+  "priority_pages": [
+    "/for-agents/",
+    "/cio-reports/latest/",
+    "/trends/",
+    "/scenario_matrix/",
+    "/methodology/"
+  ],
+  "policy": {
+    "reasoning": "separate_fact_inference_uncertainty",
+    "thesis": "bull_first_with_invalidation_boundaries"
+  }
+}

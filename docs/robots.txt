@@ -1,0 +1,7 @@
+User-agent: *
+Allow: /
+
+# Agent discoverability hints
+Sitemap: https://alphac007.github.io/trump3fight/sitemap.xml
+# LLM contract entrypoint
+# https://alphac007.github.io/trump3fight/llms.txt

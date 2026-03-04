@@ -42,3 +42,5 @@ This page is a machine-friendly entry point for AI agents, retrieval systems, an
 - Site root: `https://alphac007.github.io/trump3fight/`
 - Agent entry: `https://alphac007.github.io/trump3fight/for-agents/`
 - LLM contract: `https://alphac007.github.io/trump3fight/llms.txt`
+- Agent index JSON: `https://alphac007.github.io/trump3fight/agent-index.json`
+- Robots policy: `https://alphac007.github.io/trump3fight/robots.txt`
