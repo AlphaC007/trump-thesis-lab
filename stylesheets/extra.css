@@ -11,9 +11,9 @@
   --trump-bg-deep: #090b0f;
 }
 
-/* Global tone (default = clearer light mode) */
+/* Global tone (default = dark premium) */
 body {
-  background: linear-gradient(180deg, #f7f9fc 0%, #eef3fa 100%);
+  background: linear-gradient(180deg, var(--trump-bg-dark) 0%, var(--trump-bg-deep) 100%);
 }
 
 .md-main__inner {
@@ -21,20 +21,20 @@ body {
 }
 
 .md-content {
-  background: rgba(255, 255, 255, 0.92);
-  border: 1px solid rgba(15, 23, 42, 0.08);
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid rgba(255, 255, 255, 0.06);
   border-radius: 12px;
   padding: 0.6rem 1rem;
 }
 
-/* Dark mode theme */
-[data-md-color-scheme="slate"] body {
-  background: linear-gradient(180deg, var(--trump-bg-dark) 0%, var(--trump-bg-deep) 100%);
+/* Optional light mode fallback */
+[data-md-color-scheme="default"] body {
+  background: linear-gradient(180deg, #f7f9fc 0%, #eef3fa 100%);
 }
 
-[data-md-color-scheme="slate"] .md-content {
-  background: rgba(255, 255, 255, 0.02);
-  border: 1px solid rgba(255, 255, 255, 0.06);
+[data-md-color-scheme="default"] .md-content {
+  background: rgba(255, 255, 255, 0.92);
+  border: 1px solid rgba(15, 23, 42, 0.08);
 }
 
 /* Headlines */
