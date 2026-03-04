@@ -11,7 +11,7 @@
 <div id="trend-chart" style="width: 100%; height: 520px;"></div>
 <div id="trend-status" style="margin-top: 12px; opacity: 0.8;"></div>
 
-<script src="./assets/js/echarts.min.js"></script>
+<script src="../assets/js/echarts.min.js"></script>
 <script>
 (async function () {
   const statusEl = document.getElementById('trend-status');
@@ -92,7 +92,7 @@
   }
 
   try {
-    const res = await fetch('./assets/data/trends.json', { cache: 'no-cache' });
+    const res = await fetch('../assets/data/trends.json', { cache: 'no-cache' });
     if (!res.ok) throw new Error('HTTP ' + res.status);
     const payload = await res.json();
 
