@@ -70,6 +70,25 @@ body {
   color: #f0f3fa;
 }
 
+/* Force high legibility in dark mode */
+[data-md-color-scheme="slate"] .md-typeset,
+[data-md-color-scheme="slate"] .md-typeset p,
+[data-md-color-scheme="slate"] .md-typeset li,
+[data-md-color-scheme="slate"] .md-typeset td,
+[data-md-color-scheme="slate"] .md-typeset blockquote {
+  color: #f3f6ff;
+  line-height: 1.72;
+}
+
+[data-md-color-scheme="slate"] .md-typeset a {
+  color: #8ec5ff;
+  text-decoration-color: rgba(142, 197, 255, 0.55);
+}
+
+[data-md-color-scheme="slate"] .md-typeset strong {
+  color: #ffd86a;
+}
+
 /* Strong emphasis */
 .md-typeset strong {
   color: var(--trump-gold);
