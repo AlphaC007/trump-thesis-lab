@@ -126,10 +126,18 @@ body {
     radial-gradient(1200px 260px at 20% 0%, rgba(214, 31, 38, 0.38), transparent 60%),
     radial-gradient(1000px 300px at 80% 0%, rgba(15, 79, 168, 0.35), transparent 62%),
     linear-gradient(135deg, rgba(255, 255, 255, 0.03), rgba(255, 255, 255, 0.01));
+  background-size: 120% 120%;
+  animation: heroPulse 9s ease-in-out infinite;
   border: 1px solid rgba(255, 255, 255, 0.16);
   border-radius: 14px;
   padding: 1rem 1rem 1.1rem;
   margin: 0.6rem 0 1.1rem;
+}
+
+@keyframes heroPulse {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
 }
 
 .hero-kicker {
