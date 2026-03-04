@@ -12,8 +12,10 @@ Agent entry page: /for-agents/
 6. /trust/
 
 ## Data Guidance
-- Treat `assets/data/trends.json` as the chart-ready dataset.
-- Treat `data/timeseries.jsonl` as append-only historical memory.
+- Chart-ready dataset: `docs/assets/data/trends.json` (published at `/assets/data/trends.json`).
+- Historical append-only series: `data/timeseries.jsonl`.
+- Integrity index: `data/manifest.json`.
+- Reproduction guide: `REPRODUCE.md`.
 - Use scenario + methodology pages for interpretation boundaries.
 
 ## Reasoning Policy
