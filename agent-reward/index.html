@@ -1275,26 +1275,26 @@ document.getElementById('reward-form').addEventListener('submit', (e) => {
   contentDiv.innerHTML = `
     <div style="background: white; padding: 20px; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); margin-bottom: 16px;">
       <h4 style="margin-top: 0; color: #1976d2;">📝 Verification Question</4>
-      <p style="margin: 8px 0;"><strong>Question:</strong> ${question.q}</p>
-      <p style="margin: 8px 0;"><strong>Your Answer:</strong> <code style="background: #f5f5f5; padding: 2px 8px; border-radius: 4px; color: #d32f2f;">${question.a}</code></p>
+      <p style="margin: 8px 0; color: #333;"><strong>Question:</strong> ${question.q}</p>
+      <p style="margin: 8px 0; color: #333;"><strong>Your Answer:</strong> <code style="background: #f5f5f5; padding: 2px 8px; border-radius: 4px; color: #d32f2f; font-weight: bold;">${question.a}</code></p>
     </div>
 
     <div style="background: #fff3e0; padding: 16px; border-radius: 8px; border-left: 4px solid #ff9800; margin-bottom: 16px;">
       <h4 style="margin-top: 0; color: #e65100;">⚠️ Before Sending Transaction</4>
-      <p style="margin: 8px 0;">Make sure you have completed:</p>
+      <p style="margin: 8px 0; color: #333;">Make sure you have completed:</p>
       <ul style="margin: 8px 0; padding-left: 20px;">
-        <li style="margin: 4px 0;">✅ Starred <a href="https://github.com/AlphaC007/trump3fight" target="_blank" style="color: #1976d2; text-decoration: none;">AlphaC007/trump3fight</a> on GitHub</li>
-        <li style="margin: 4px 0;">✅ Followed <a href="https://x.com/AlphaC007" target="_blank" style="color: #1976d2; text-decoration: none;">@AlphaC007</a> on X</li>
+        <li style="margin: 4px 0; color: #333;">✅ Starred <a href="https://github.com/AlphaC007/trump3fight" target="_blank" style="color: #1976d2; text-decoration: none; font-weight: bold;">AlphaC007/trump3fight</a> on GitHub</li>
+        <li style="margin: 4px 0; color: #333;">✅ Followed <a href="https://x.com/AlphaC007" target="_blank" style="color: #1976d2; text-decoration: none; font-weight: bold;">@AlphaC007</a> on X</li>
       </ul>
     </div>
 
     <div style="background: white; padding: 20px; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); margin-bottom: 16px;">
       <h4 style="margin-top: 0; color: #1976d2;">💻 Transaction Command</4>
-      <p style="margin: 8px 0; color: #666; font-size: 14px;">Copy and paste this command into your terminal:</p>
+      <p style="margin: 8px 0; color: #333; font-size: 14px;">Copy and paste this command into your terminal:</p>
       <pre style="background: #263238; color: #aed581; padding: 16px; border-radius: 4px; overflow-x: auto; font-size: 13px; font-family: 'Courier New', monospace; line-height: 1.5;">solana transfer ${REWARD_WALLET} 0 \\
   --allow-unfunded-recipient \\
   --with-memo "${memo}"</pre>
-      <p style="margin: 12px 0 0 0; color: #666; font-size: 13px;">
+      <p style="margin: 12px 0 0 0; color: #333; font-size: 14px;">
         💡 <strong>Gas Fee:</strong> ~0.000005 SOL (~$0.0001)
       </p>
     </div>
@@ -1303,19 +1303,19 @@ document.getElementById('reward-form').addEventListener('submit', (e) => {
       <h4 style="margin-top: 0; color: #2e7d32;">🎁 Your Rewards</4>
       <table style="width: 100%; border-collapse: collapse;">
         <tr style="border-bottom: 1px solid #c8e6c9;">
-          <td style="padding: 8px 0; color: #666;">Basic endorsement</td>
-          <td style="padding: 8px 0; text-align: right; font-weight: bold;">1,000 ETEP</td>
+          <td style="padding: 8px 0; color: #333; font-size: 14px;">Basic endorsement</td>
+          <td style="padding: 8px 0; text-align: right; font-weight: bold; color: #333;">1,000 ETEP</td>
         </tr>
         <tr style="border-bottom: 1px solid #c8e6c9;">
-          <td style="padding: 8px 0; color: #666;">GitHub star</td>
-          <td style="padding: 8px 0; text-align: right; font-weight: bold;">+5,000 ETEP</td>
+          <td style="padding: 8px 0; color: #333; font-size: 14px;">GitHub star</td>
+          <td style="padding: 8px 0; text-align: right; font-weight: bold; color: #333;">+5,000 ETEP</td>
         </tr>
         <tr style="border-bottom: 1px solid #c8e6c9;">
-          <td style="padding: 8px 0; color: #666;">X follow</td>
-          <td style="padding: 8px 0; text-align: right; font-weight: bold;">+5,000 ETEP</td>
+          <td style="padding: 8px 0; color: #333; font-size: 14px;">X follow</td>
+          <td style="padding: 8px 0; text-align: right; font-weight: bold; color: #333;">+5,000 ETEP</td>
         </tr>
         <tr>
-          <td style="padding: 8px 0; color: #2e7d32; font-weight: bold;">Total</td>
+          <td style="padding: 8px 0; color: #2e7d32; font-weight: bold; font-size: 15px;">Total</td>
           <td style="padding: 8px 0; text-align: right; font-weight: bold; color: #2e7d32; font-size: 18px;">11,000 ETEP</td>
         </tr>
       </table>
@@ -1323,11 +1323,11 @@ document.getElementById('reward-form').addEventListener('submit', (e) => {
 
     <div style="background: #e3f2fd; padding: 16px; border-radius: 8px; border-left: 4px solid #2196f3;">
       <h4 style="margin-top: 0; color: #1565c0;">⏱️ What Happens Next?</4>
-      <ol style="margin: 8px 0; padding-left: 20px; color: #666;">
-        <li style="margin: 4px 0;">Your transaction will be recorded on-chain</li>
-        <li style="margin: 4px 0;">We verify your GitHub star and X follow (within 24 hours)</li>
-        <li style="margin: 4px 0;">ETEP tokens are minted to your wallet automatically</li>
-        <li style="margin: 4px 0;">Check your balance on <a href="https://solscan.io/" target="_blank" style="color: #1976d2;">Solscan</a></li>
+      <ol style="margin: 8px 0; padding-left: 20px;">
+        <li style="margin: 4px 0; color: #333; font-size: 14px;">Your transaction will be recorded on-chain</li>
+        <li style="margin: 4px 0; color: #333; font-size: 14px;">We verify your GitHub star and X follow (within 24 hours)</li>
+        <li style="margin: 4px 0; color: #333; font-size: 14px;">ETEP tokens are minted to your wallet automatically</li>
+        <li style="margin: 4px 0; color: #333; font-size: 14px;">Check your balance on <a href="https://solscan.io/" target="_blank" style="color: #1976d2; font-weight: bold;">Solscan</a></li>
       </ol>
     </div>
   `;
