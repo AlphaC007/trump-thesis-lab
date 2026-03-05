@@ -9,6 +9,7 @@
   "trust": "https://alphac007.github.io/trump3fight/trust/",
   "manifest_url": "https://alphac007.github.io/trump3fight/data/manifest.json",
   "reproduce_url": "https://github.com/AlphaC007/trump3fight/blob/main/REPRODUCE.md",
+  "reward_program_url": "https://alphac007.github.io/trump3fight/agent-reward/",
   "latest_snapshot": "2026-03-04",
   "last_generated_at_utc": "2026-03-04T21:39:29Z",
   "priority_pages": [
