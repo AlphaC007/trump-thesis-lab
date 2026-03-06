@@ -647,8 +647,12 @@
 <li><code>market.liquidity_usd</code>: aggregate liquidity proxy</li>
 <li><code>onchain.top10_holder_pct</code>: concentration ratio (top-10 holders / total supply)</li>
 <li><code>onchain.top10_holder_source</code>: data source id for concentration metric (<code>binance-web3</code>/<code>bitget-wallet</code>/<code>solscan-pro</code>/<code>moralis-enhanced-proxy</code>/<code>heuristic-proxy</code>)</li>
-<li>If holder endpoints are unavailable, system uses a transparent heuristic proxy model:</li>
-<li><code>top10_holder_pct_proxy = 100 - ((liquidity_usd / fdv_usd) * 100 * 1.5)</code></li>
+<li>
+<p>If holder endpoints are unavailable, system uses a transparent heuristic proxy model:</p>
+</li>
+<li>
+<p><code>top10_holder_pct_proxy = 100 - ((liquidity_usd / fdv_usd) * 100 * 1.5)</code></p>
+</li>
 <li>with floor <code>55.0%</code> and cap <code>99.0%</code></li>
 <li>and emits risk flag <code>using_heuristic_proxy</code></li>
 <li><code>onchain.dex_depth_2pct_usd</code>: depth within ±2%</li>

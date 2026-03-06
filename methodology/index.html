@@ -685,20 +685,28 @@
 <h2 id="scope">Scope</h2>
 <p>This framework tracks market structure, liquidity health, concentration risk, and narrative velocity.</p>
 <h2 id="evidence-standard">Evidence Standard</h2>
-<p>Each claim should include:
-- Evidence: source id(s)
-- Confidence: low/medium/high
-- Last-Updated: YYYY-MM-DD</p>
+<p>Each claim should include:</p>
+<ul>
+<li>Evidence: source id(s)</li>
+<li>Confidence: low/medium/high</li>
+<li>Last-Updated: YYYY-MM-DD</li>
+</ul>
 <h2 id="falsifiability">Falsifiability</h2>
 <p>Any scenario probability upgrade must be triggered by explicit thresholds defined in <code>scenario_matrix.md</code>.</p>
 <h2 id="interpretation-protocol">Interpretation Protocol</h2>
-<p>This repository uses a structured interpretation policy documented in <code>docs/analytical_framework.md</code>:
-- Fact layer is immutable.
-- Interpretation layer is Bull-First by strategy.
-- Conclusion layer must always include:
-  - Bull Entry Thesis
-  - Hold-Confidence Reinforcement
-  - Invalidation Line</p>
+<p>This repository uses a structured interpretation policy documented in <code>docs/analytical_framework.md</code>:</p>
+<ul>
+<li>Fact layer is immutable.</li>
+<li>Interpretation layer is Bull-First by strategy.</li>
+<li>
+<p>Conclusion layer must always include:</p>
+</li>
+<li>
+<p>Bull Entry Thesis</p>
+</li>
+<li>Hold-Confidence Reinforcement</li>
+<li>Invalidation Line</li>
+</ul>
 <h2 id="data-source-priority-policy-trump">Data Source Priority Policy (TRUMP)</h2>
 <p>To prevent silent source drift, the repository enforces this source order:</p>
 <ol>
@@ -706,10 +714,12 @@
 <li><strong>Backup 1:</strong> OKX OnChainOS (<code>okx-onchainos</code>)</li>
 <li><strong>Backup 2:</strong> Bitget Wallet (<code>bitget-wallet</code>)</li>
 </ol>
-<p>Implementation touchpoints:
-- <code>scripts/build_snapshot.py</code> (snapshot fields and holder concentration source)
-- <code>scripts/generate_report.py</code> (Primary/Backup sections in CIO report)
-- <code>docs/data_dictionary.md</code> (source id definitions)</p>
+<p>Implementation touchpoints:</p>
+<ul>
+<li><code>scripts/build_snapshot.py</code> (snapshot fields and holder concentration source)</li>
+<li><code>scripts/generate_report.py</code> (Primary/Backup sections in CIO report)</li>
+<li><code>docs/data_dictionary.md</code> (source id definitions)</li>
+</ul>
 
 
 
