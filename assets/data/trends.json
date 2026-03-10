@@ -1,7 +1,7 @@
 {
-  "generated_at_utc": "2026-03-09T16:02:00.811313Z",
-  "count_raw": 60,
-  "count_daily": 18,
+  "generated_at_utc": "2026-03-10T05:34:16.724954Z",
+  "count_raw": 61,
+  "count_daily": 19,
   "points_raw": [
     {
       "ts": "2026-02-20T12:26:10Z",
@@ -362,6 +362,12 @@
       "price_usd": 2.9878614111339106,
       "top10_holder_pct": 89.7245,
       "bull_probability_pct": 65.02
+    },
+    {
+      "ts": "2026-03-10T05:01:07Z",
+      "price_usd": 2.9188685678817774,
+      "top10_holder_pct": 89.5053,
+      "bull_probability_pct": 54.52
     }
   ],
   "points_daily": [
@@ -490,6 +496,13 @@
       "top10_holder_pct": 89.7245,
       "bull_probability_pct": 65.4067,
       "samples": 3
+    },
+    {
+      "day": "2026-03-10",
+      "price_usd": 2.9189,
+      "top10_holder_pct": 89.5053,
+      "bull_probability_pct": 54.52,
+      "samples": 1
     }
   ]
 }
