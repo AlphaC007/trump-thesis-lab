@@ -1,0 +1,13 @@
+{
+  "date": "2026-03-13",
+  "framework": "Bull-First Social Intelligence",
+  "freshness_window": "48h",
+  "dimensions": {},
+  "summary": {
+    "total_signals": 0,
+    "active_dimensions": 0,
+    "overall_sentiment": "INSUFFICIENT_DATA",
+    "confidence": "NONE",
+    "bull_verdict": "0 signals across 0 independent dimensions. Community engagement at baseline level, consistent with observation phase characteristics."
+  }
+}
