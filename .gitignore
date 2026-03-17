@@ -1,0 +1,7 @@
+.env
+PRIVATE_WORKAREA/
+node_modules/
+logs/
+site/
+data/
+.DS_Store
