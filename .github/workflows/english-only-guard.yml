@@ -1,0 +1,49 @@
+name: english-only-guard
+
+on: [push, pull_request]
+
+jobs:
+  guard:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Block CJK characters in tracked files
+        shell: bash
+        run: |
+          set -euo pipefail
+          files=$(git ls-files | grep -Ev "\\.(png|jpg|jpeg|webp|gif|ico|pdf|zip|gz|tgz|woff2?)$" || true)
+          if [ -z "${files}" ]; then
+            echo "No files to scan."
+            exit 0
+          fi
+          if echo "${files}" | xargs -r grep -nP "[\x{4E00}-\x{9FFF}]" -- >/dev/null; then
+            echo "CJK characters detected in tracked files. Public repo must be English-only."
+            echo
+            echo "Matches:"
+            echo "${files}" | xargs -r grep -nP "[\x{4E00}-\x{9FFF}]" -- || true
+            exit 1
+          fi
+
+      - name: Block CJK characters in commit messages
+        shell: bash
+        run: |
+          set -euo pipefail
+          if [ "${{ github.event_name }}" = "pull_request" ]; then
+            base="${{ github.event.pull_request.base.sha }}"
+            head="${{ github.event.pull_request.head.sha }}"
+          else
+            base="${{ github.event.before }}"
+            head="${{ github.sha }}"
+          fi
+          if [ "$base" = "0000000000000000000000000000000000000000" ]; then
+            base=$(git rev-list --max-parents=0 "$head" | tail -n 1)
+          fi
+          msgs=$(git log --format=%B "$base..$head" || true)
+          if echo "$msgs" | grep -nP "[\x{4E00}-\x{9FFF}]" >/dev/null; then
+            echo "CJK characters detected in commit messages. Commit messages must be English-only."
+            echo
+            echo "Offending commit messages (raw):"
+            echo "$msgs"
+            exit 1
+          fi
