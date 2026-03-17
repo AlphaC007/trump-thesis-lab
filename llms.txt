@@ -3,6 +3,8 @@
 Primary site: https://alphac007.github.io/trump3fight/
 Agent entry page: /for-agents/
 
+Related (working title): https://alphac007.github.io/blind-box/
+
 ## Canonical Reading Order
 1. /for-agents/
 2. /cio-reports/latest/
