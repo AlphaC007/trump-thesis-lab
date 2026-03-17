@@ -735,6 +735,7 @@
 
 <div id="trend-highlights" style="margin: 10px 0 14px 0; padding: 10px 12px; border: 1px solid #ddd; border-radius: 8px;"></div>
 <div id="trend-chart" style="width: 100%; height: 520px;"></div>
+<div id="trend-chart-derivatives" style="width: 100%; height: 320px; margin-top: 10px;"></div>
 <div id="trend-status" style="margin-top: 12px; opacity: 0.8;"></div>
 
 <script src="https://cdn.jsdelivr.net/npm/echarts@5.5.0/dist/echarts.min.js"></script>
@@ -742,6 +743,7 @@
 (async function () {
   const statusEl = document.getElementById('trend-status');
   const container = document.getElementById('trend-chart');
+  const containerDeriv = document.getElementById('trend-chart-derivatives');
   const btnDaily = document.getElementById('btn-daily');
   const btnRaw = document.getElementById('btn-raw');
   const highlightsEl = document.getElementById('trend-highlights');
@@ -752,6 +754,7 @@
   }
 
   const chart = echarts.init(container);
+  const chartDeriv = containerDeriv ? echarts.init(containerDeriv) : null;
 
   function fmtNum(v, digits = 2) {
     return (v === null || v === undefined) ? 'N/A' : Number(v).toFixed(digits);
@@ -830,6 +833,99 @@
       ]
     }, true);
 
+    // Derivatives evidence panel (explain bull moves)
+    if (chartDeriv) {
+      const taker = points.map(p => p?.derivatives?.taker_buy_sell_ratio_1d ?? null);
+      const funding = points.map(p => p?.derivatives?.funding_rate ?? null);
+      const oi = points.map(p => p?.derivatives?.open_interest ?? null);
+      // Best-effort USD notional approximation. If markPrice isn't present in trends.json,
+      // we approximate with spot price_usd for readability.
+      const oiUsd = points.map((p, i) => {
+        const q = oi[i];
+        const px = p?.price_usd;
+        if (q === null || q === undefined || px === null || px === undefined) return null;
+        return Number(q) * Number(px);
+      });
+
+      function tagTaker(x) {
+        if (x === null || x === undefined) return 'N/A';
+        const v = Number(x);
+        if (v >= 1.05) return 'BUY-LEAN';
+        if (v >= 1.02) return 'BUY';
+        if (v <= 0.95) return 'SELL-LEAN';
+        if (v <= 0.98) return 'SELL';
+        return 'NEUTRAL';
+      }
+
+      function tagFunding(fr) {
+        if (fr === null || fr === undefined) return 'N/A';
+        const a = Math.abs(Number(fr));
+        if (a >= 0.0008) return 'HOT';
+        if (a >= 0.0003) return 'WARM';
+        return 'COOL';
+      }
+
+      function tagOi(oiSeries, idx) {
+        const cur = oiSeries[idx];
+        const prev = idx > 0 ? oiSeries[idx - 1] : null;
+        if (cur === null || cur === undefined || prev === null || prev === undefined) return 'N/A';
+        const d = Number(cur) - Number(prev);
+        if (d > 0) return 'UP';
+        if (d < 0) return 'DOWN';
+        return 'FLAT';
+      }
+
+      chartDeriv.setOption({
+        title: {
+          text: 'Derivatives Evidence Panel (Taker / Funding / OI≈USD)',
+          left: 'center'
+        },
+        tooltip: {
+          trigger: 'axis',
+          formatter: function (params) {
+            const idx = params?.[0]?.dataIndex ?? null;
+            const p = (idx === null) ? {} : (points[idx] || {});
+            const t = p?.derivatives?.taker_buy_sell_ratio_1d;
+            const f = p?.derivatives?.funding_rate;
+            const o = p?.derivatives?.open_interest;
+            const oU = (idx === null) ? null : oiUsd[idx];
+            const tTag = tagTaker(t);
+            const fTag = tagFunding(f);
+            const oTag = (idx === null) ? 'N/A' : tagOi(oi, idx);
+            const ts = isDaily ? (p.day || '') : (p.ts || '');
+            return [
+              `<b>${ts}</b>`,
+              `Signal: <b>${tTag}</b> / <b>${fTag}</b> / <b>${oTag}</b>`,
+              `Taker(1d): ${t === null || t === undefined ? 'N/A' : Number(t).toFixed(4)}`,
+              `Funding: ${f === null || f === undefined ? 'N/A' : Number(f).toFixed(8)} (≈4h cadence)`,
+              `OI: ${o === null || o === undefined ? 'N/A' : Number(o).toFixed(2)}`,
+              `OI≈USD: ${oU === null || oU === undefined ? 'N/A' : '$' + Number(oU).toFixed(0)}`,
+            ].join('<br/>');
+          }
+        },
+        legend: {
+          top: 28,
+          data: ['Taker Buy/Sell (1d)', 'Funding Rate', 'OI≈USD (approx)']
+        },
+        grid: { left: 50, right: 60, top: 80, bottom: 50 },
+        xAxis: {
+          type: 'category',
+          data: labels,
+          axisLabel: { rotate: 35 }
+        },
+        yAxis: [
+          { type: 'value', name: 'Taker / Funding', position: 'left', scale: true },
+          { type: 'value', name: 'OI≈USD', position: 'right', scale: true, axisLabel: { formatter: v => '$' + Number(v).toFixed(0) } }
+        ],
+        dataZoom: [{ type: 'inside', start: 0, end: 100 }, { start: 0, end: 100 }],
+        series: [
+          { name: 'Taker Buy/Sell (1d)', type: 'line', yAxisIndex: 0, smooth: true, showSymbol: false, lineStyle: { width: 2 }, data: taker },
+          { name: 'Funding Rate', type: 'line', yAxisIndex: 0, smooth: true, showSymbol: false, lineStyle: { width: 1, type: 'dashed' }, data: funding },
+          { name: 'OI≈USD (approx)', type: 'line', yAxisIndex: 1, smooth: true, showSymbol: false, lineStyle: { width: 2 }, data: oiUsd }
+        ]
+      }, true);
+    }
+
     const latest = points[points.length - 1] || {};
     const latestTs = isDaily ? latest.day : latest.ts;
     statusEl.textContent = `${seriesName} | Updated ${latestTs || 'N/A'} | Points: ${points.length} | Latest: $${fmtNum(latest.price_usd)} / Bull ${fmtNum(latest.bull_probability_pct)}% / Holder ${fmtNum(latest.top10_holder_pct)}%`;
@@ -888,6 +984,7 @@
     });
 
     window.addEventListener('resize', () => chart.resize());
+    if (chartDeriv) window.addEventListener('resize', () => chartDeriv.resize());
   } catch (err) {
     statusEl.textContent = 'Failed to load trend data: ' + err.message;
   }
