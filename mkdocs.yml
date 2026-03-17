@@ -34,8 +34,8 @@ theme:
     - content.code.copy
   icon:
     repo: fontawesome/brands/github
-  logo: assets/trump-fight-logo.webp
-  favicon: assets/favicon.ico
+  logo: assets/trump-fight-logo.png
+  favicon: assets/favicon.png
 
 nav:
   - Home: index.md
