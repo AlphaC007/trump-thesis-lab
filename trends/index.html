@@ -771,10 +771,10 @@
     }
 
     const latest = src[src.length - 1] || {};
-    const weekBack = src[Math.max(0, src.length - 8)] || src[0] || {};
+    const weekBack = src[Math.max(0, src.length - 22)] || src[0] || {};
 
-    const priceChange7d = pctChange(weekBack.price_usd, latest.price_usd);
-    const bullChange7d = pctChange(weekBack.bull_probability_pct, latest.bull_probability_pct);
+    const priceChange21d = pctChange(weekBack.price_usd, latest.price_usd);
+    const bullChange21d = pctChange(weekBack.bull_probability_pct, latest.bull_probability_pct);
 
     const allPrices = src.map(p => p.price_usd).filter(v => v !== null && v !== undefined);
     const allBull = src.map(p => p.bull_probability_pct).filter(v => v !== null && v !== undefined);
@@ -786,8 +786,8 @@
 
     highlightsEl.innerHTML = `
       <strong>Trend Highlights</strong><br/>
-      • 7D Price Change: <b>${priceChange7d === null ? 'N/A' : fmtNum(priceChange7d) + '%'}</b> &nbsp; | &nbsp;
-      7D Bull Probability Change: <b>${bullChange7d === null ? 'N/A' : fmtNum(bullChange7d) + '%'}</b><br/>
+      • 21D Price Change: <b>${priceChange21d === null ? 'N/A' : fmtNum(priceChange21d) + '%'}</b> &nbsp; | &nbsp;
+      21D Bull Probability Change: <b>${bullChange21d === null ? 'N/A' : fmtNum(bullChange21d) + '%'}</b><br/>
       • Price Range (window): <b>$${fmtNum(minPrice)} → $${fmtNum(maxPrice)}</b><br/>
       • Bull Probability Range (window): <b>${fmtNum(minBull)}% → ${fmtNum(maxBull)}%</b>
     `;
