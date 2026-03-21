@@ -1,32 +1,35 @@
 {
-  "schema": "trump-thesis-lab.agent-index.v1",
-  "schema_version": "1.1.0",
-  "updated_at": "2026-03-04T21:55:04Z",
+  "schema": "trump-thesis-lab.agent-index.v2",
+  "schema_version": "2.0.0",
+  "updated_at": "2026-03-21T18:00:00Z",
   "name": "The $TRUMP Thesis Lab",
+  "description": "AI Agent-powered open-source $TRUMP memecoin research with Bull-First thesis framework.",
   "site": "https://alphac007.github.io/trump3fight/",
   "agent_entry": "https://alphac007.github.io/trump3fight/for-agents/",
   "llms": "https://alphac007.github.io/trump3fight/llms.txt",
+  "mcp_server": {
+    "repo": "https://github.com/AlphaC007/aap-agent-bounty-skill",
+    "transport": "stdio",
+    "tools": ["get_thesis", "get_scenario", "get_cio_report", "get_market_data", "get_claim_guide"]
+  },
   "trust": "https://alphac007.github.io/trump3fight/trust/",
-  "manifest_url": "https://alphac007.github.io/trump3fight/data/manifest.json",
-  "reproduce_url": "https://github.com/AlphaC007/trump3fight/blob/main/REPRODUCE.md",
   "reward_program_url": "https://alphac007.github.io/trump3fight/agent-reward/",
-  "latest_snapshot": "2026-03-04",
-  "last_generated_at_utc": "2026-03-04T21:39:29Z",
   "priority_pages": [
     "/for-agents/",
     "/cio-reports/latest/",
     "/trends/",
     "/scenario_matrix/",
-    "/methodology/",
-    "/trust/"
+    "/methodology/"
   ],
-  "policy": {
-    "reasoning": "separate_fact_inference_uncertainty",
-    "thesis": "bull_first_with_invalidation_boundaries"
+  "core_thesis": {
+    "asset": "$TRUMP",
+    "base_case": "$100+",
+    "bull_case": "$250+",
+    "framework": "Bull-First with invalidation boundaries"
   },
-  "source_priority": [
-    "binance-web3",
-    "okx-onchainos",
-    "bitget-wallet"
-  ]
+  "social": {
+    "x": "https://x.com/AlphaC007",
+    "community": "https://x.com/GetTrumpMemes",
+    "github": "https://github.com/AlphaC007"
+  }
 }

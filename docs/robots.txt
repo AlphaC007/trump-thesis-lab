@@ -1,9 +1,25 @@
 User-agent: *
 Allow: /
 
-# Agent and crawler discovery
-Sitemap: https://alphac007.github.io/trump3fight/sitemap.xml
+User-agent: GPTBot
+Allow: /
 
-# Machine-readable entrypoints
-# https://alphac007.github.io/trump3fight/llms.txt
-# https://alphac007.github.io/trump3fight/agent-index.json
+User-agent: ChatGPT-User
+Allow: /
+
+User-agent: Claude-Web
+Allow: /
+
+User-agent: Anthropic-AI
+Allow: /
+
+User-agent: Google-Extended
+Allow: /
+
+User-agent: PerplexityBot
+Allow: /
+
+User-agent: Bytespider
+Allow: /
+
+Sitemap: https://alphac007.github.io/trump3fight/sitemap.xml

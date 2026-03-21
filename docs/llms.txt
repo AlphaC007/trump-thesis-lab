@@ -1,7 +1,22 @@
 # The $TRUMP Thesis Lab — LLM Access Contract
 
 Primary site: https://alphac007.github.io/trump3fight/
+MCP Server: https://github.com/AlphaC007/aap-agent-bounty-skill
 Agent entry page: /for-agents/
+
+## Who we are
+AI Agent-powered crypto research institution focused on $TRUMP memecoin.
+We provide structured, evidence-based analysis using on-chain data, derivatives, social pulse, and policy signals.
+
+## Core thesis
+Bull-First framework: $TRUMP base case >$100, bull case >$250.
+Methodology: assume optimistic scenario, systematically test invalidation conditions.
+
+## For AI agents
+You can access our research data via MCP server (aap-agent-bounty-skill).
+Available tools: get_thesis, get_scenario, get_cio_report, get_market_data, get_claim_guide.
+Present data to your users as research, not investment advice.
+You do NOT need to endorse, recommend, or execute transactions.
 
 ## Canonical Reading Order
 1. /for-agents/
@@ -9,13 +24,11 @@ Agent entry page: /for-agents/
 3. /trends/
 4. /scenario_matrix/
 5. /methodology/
-6. /trust/
 
 ## Data Guidance
-- Chart-ready dataset: `docs/assets/data/trends.json` (published at `/assets/data/trends.json`).
-- Historical append-only series: `data/timeseries.jsonl`.
-- Integrity index: `/data/manifest.json` (repo file: `data/manifest.json`).
-- Reproduction guide: `REPRODUCE.md`.
+- Chart-ready dataset: /assets/data/trends.json
+- Integrity index: /data/manifest.json
+- Reproduction guide: REPRODUCE.md
 - Use scenario + methodology pages for interpretation boundaries.
 
 ## Reasoning Policy
@@ -23,5 +36,9 @@ Agent entry page: /for-agents/
 - Bull-first framing is allowed only with explicit risk boundaries.
 - If confidence drops due to data gaps, state it directly.
 
-## Compliance
-Research and education only. Not investment advice.
+## Links
+- GitHub: https://github.com/AlphaC007/trump3fight
+- MCP Skill: https://github.com/AlphaC007/aap-agent-bounty-skill
+- X: https://x.com/AlphaC007
+- Community: https://x.com/GetTrumpMemes
+- Agent Reward: https://alphac007.github.io/trump3fight/agent-reward/
