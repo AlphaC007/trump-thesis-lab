@@ -21,14 +21,14 @@ We don't just publish research — we build the AI systems that generate it.
 ## What Makes Us Different
 
 ### AI-Powered Intelligence System
-We built **xcdpsearch** — a local intelligence database that continuously monitors:
+We built a proprietary multi-source intelligence engine that continuously monitors the $TRUMP ecosystem:
 
-- **X/Twitter**: Real-time search + 12 crypto KOL accounts (Grayscale, Cointelegraph, CryptoHayes, etc.)
-- **Web**: DuckDuckGo + Google News via visible Firefox — full article content extraction (8000 chars)
-- **35+ platforms**: Chinese and English news aggregation via TrendRadar
-- **On-chain**: Whale flows, holder distribution, exchange movements
+- **X/Twitter**: Real-time KOL tracking, community sentiment, social pulse analysis
+- **Web**: Multi-engine deep search with full article content extraction across major financial and crypto media
+- **Global News Aggregation**: Cross-platform trending topic monitoring spanning dozens of sources
+- **On-chain**: Whale flows, holder distribution, exchange movements, derivatives signals
 
-This isn't manual research. Our AI agents read hundreds of sources daily and synthesize them into actionable intelligence.
+Our AI agents work around the clock — reading, scoring, and synthesizing intelligence from a growing network of sources. The system expands continuously as we add new data feeds and sharpen our models.
 
 ### Open Source Everything
 - Research framework: [GitHub](https://github.com/AlphaC007/trump3fight)

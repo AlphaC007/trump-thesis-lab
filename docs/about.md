@@ -13,15 +13,15 @@ We build open-source AI systems that analyze $TRUMP memecoin using on-chain data
 ## What We Built
 
 ### Intelligence Infrastructure (xcdpsearch)
-A local intelligence database with 5 data sources:
+A proprietary multi-source intelligence engine, continuously expanding:
 
-- **X/Twitter search + tweet extraction** — via Chrome CDP, visible browser
-- **X KOL monitoring** — 12 crypto KOL accounts tracked every 2 hours (Grayscale, Cointelegraph, CryptoHayes, CoinMarketCap, etc.)
-- **Web search** — DuckDuckGo + Google News via visible Firefox, with full article content extraction (up to 8000 characters per article)
-- **TrendRadar** — 35+ platform news aggregation (Docker deployment)
-- **@GetTrumpMemes priority tracking** — 30-minute high-frequency monitoring
+- **X/Twitter search + tweet extraction** — via browser automation, capturing full tweet content and engagement signals
+- **X KOL monitoring** — a growing roster of top crypto accounts tracked at high frequency
+- **Web search** — multi-engine coverage with full article content extraction for deep analysis
+- **Global news aggregation** — cross-platform trending topic monitoring across financial and crypto media
+- **@GetTrumpMemes priority tracking** — high-frequency community pulse monitoring
 
-33 watch topics, 360+ structured results in the index, growing daily.
+The index grows daily as new sources, topics, and KOL accounts are added. Our goal is comprehensive coverage of every signal that matters to the $TRUMP thesis.
 
 ### AI-Powered Content Generation (xcdp)
 Our X promotion system generates content driven by real-time intelligence:
