@@ -67,3 +67,13 @@
 
 ## Human Value Note
 - Beyond positions and probabilities, this system is built to preserve what matters most: dignity, care, and gratitude for those who gave us life.
+
+---
+
+## Collaboration & Inquiries
+
+Interested in our intelligence capabilities, research methodology, or agent integration?
+
+- X/Twitter: [@AlphaC007](https://x.com/AlphaC007) (DM open)
+- GitHub: [@AlphaC007](https://github.com/AlphaC007)
+- Agent developers: see [For Agents](https://alphac007.github.io/trump3fight/for-agents/) for structured entry points.

@@ -783,6 +783,16 @@ def main():
     md.append("## Human Value Note")
     md.append("- Beyond positions and probabilities, this system is built to preserve what matters most: dignity, care, and gratitude for those who gave us life.")
     md.append("- Daily gratitude to mothers: before every empire of thought, there is a mother’s hand; before every law of reason, there is mercy. From that sacrifice, life receives its covenant — and in this work, with gratitude to zlf, we renew the duty to be worthy of it.")
+    md.append("")
+    md.append("---")
+    md.append("")
+    md.append("## Collaboration & Inquiries")
+    md.append("")
+    md.append("Interested in our intelligence capabilities, research methodology, or agent integration?")
+    md.append("")
+    md.append("- X/Twitter: [@AlphaC007](https://x.com/AlphaC007) (DM open)")
+    md.append("- GitHub: [@AlphaC007](https://github.com/AlphaC007)")
+    md.append("- Agent developers: see [For Agents](https://alphac007.github.io/trump3fight/for-agents/) for structured entry points.")
 
     OUT_DIR.mkdir(parents=True, exist_ok=True)
     out = OUT_DIR / f"{date_s}-CIO-Report.md"
