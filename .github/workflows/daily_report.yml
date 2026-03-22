@@ -36,11 +36,21 @@ jobs:
         run: |
           python scripts/check_cio_hub_freshness.py
 
+      - name: Refresh README freshness dates
+        run: |
+          set -euo pipefail
+          today="$(date -u +%Y-%m-%d)"
+          published_at="$(date -u +%Y-%m-%dT%H:%M:%SZ)"
+          sed -i "s#- Latest snapshot: `data/snapshots/2026-03-04.snapshot.json`#- Latest snapshot: `data/snapshots/${today}.snapshot.json`#" README.md
+          sed -i "s#- Tag: `daily-2026-03-04`#- Tag: `daily-${today}`#" README.md
+          sed -i "s#- URL: `https://github.com/AlphaC007/trump3fight/releases/tag/daily-2026-03-04`#- URL: `https://github.com/AlphaC007/trump3fight/releases/tag/daily-${today}`#" README.md
+          sed -i "s#- Published at: `2026-03-04T21:58:18Z`#- Published at: `${published_at}`#" README.md
+
       - name: Commit and push report + hub
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add reports/cio_briefings/*-CIO-Report.md docs/cio-reports/latest.md docs/cio-reports/archive/*-CIO-Report.md
+          git add README.md reports/cio_briefings/*-CIO-Report.md docs/cio-reports/latest.md docs/cio-reports/archive/*-CIO-Report.md
           git diff --cached --quiet || git commit -m "chore(report): daily CIO report + hub sync"
           git pull --rebase origin main
           git push
