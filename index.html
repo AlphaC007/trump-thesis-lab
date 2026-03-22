@@ -866,6 +866,58 @@ $TRUMP Path to $100 | Bull Case $250+
   <a class="cta-btn cta-secondary" href="trends/">Open Trend Dashboard</a>
 </div>
 
+<div id="quick-view">
+  <p><strong>Current quick view (auto-updated):</strong></p>
+  <p>Loading latest market snapshot...</p>
+</div>
+
+<script>
+(async function () {
+  const container = document.getElementById('quick-view');
+  if (!container) return;
+
+  const formatNumber = (value, digits = 2) => {
+    const number = Number(value);
+    return Number.isFinite(number) ? number.toFixed(digits) : 'N/A';
+  };
+
+  try {
+    const response = await fetch('/trump3fight/assets/data/trends.json', { cache: 'no-store' });
+    if (!response.ok) {
+      throw new Error(`HTTP ${response.status}`);
+    }
+
+    const payload = await response.json();
+    const series = Array.isArray(payload.points_daily) && payload.points_daily.length
+      ? payload.points_daily
+      : Array.isArray(payload.points_raw) && payload.points_raw.length
+        ? payload.points_raw
+        : [];
+
+    const latest = series[series.length - 1];
+    if (!latest) {
+      throw new Error('No trend points available');
+    }
+
+    container.innerHTML = `
+      <p><strong>Current quick view (auto-updated):</strong></p>
+      <ul>
+        <li>Price: $${formatNumber(latest.price_usd, 4)}</li>
+        <li>Bull Probability: ${formatNumber(latest.bull_probability_pct, 2)}%</li>
+        <li>Top 10 Holder Concentration: ${formatNumber(latest.top10_holder_pct, 2)}%</li>
+        <li>Last Updated (UTC): ${latest.ts || 'N/A'}</li>
+      </ul>
+    `;
+  } catch (error) {
+    container.innerHTML = `
+      <p><strong>Current quick view (auto-updated):</strong></p>
+      <p>Latest market snapshot unavailable.</p>
+    `;
+    console.error('Quick view load failed:', error);
+  }
+})();
+</script>
+
 <hr>
 <h2 id="what-makes-us-different">What Makes Us Different</h2>
 <h3 id="ai-powered-intelligence-system">AI-Powered Intelligence System</h3>
