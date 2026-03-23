@@ -5,6 +5,14 @@
 $TRUMP Path to $100 | Bull Case $250+
 </div>
 
+<div style="width:100%; max-width:720px; margin:24px auto;">
+<video controls preload="metadata" playsinline
+style="width:100%; border-radius:12px;"
+poster="">
+<source src="assets/video/trump.mp4" type="video/mp4">
+</video>
+</div>
+
 We are a new-generation **AI-native research operation** building open-source tools to analyze $TRUMP with on-chain data, derivatives, social pulse, and macro policy signals.
 
 Our core thesis: **$TRUMP is structurally undervalued.** Base case >$100, bull case >$250.
@@ -14,14 +22,6 @@ We don't just publish research — our AI agents generate it continuously from r
 <div class="hero-actions">
   <a class="cta-btn cta-primary" href="cio-reports/latest/">Read Today’s CIO Hub</a>
   <a class="cta-btn cta-secondary" href="trends/">Open Trend Dashboard</a>
-</div>
-
-<div style="width:100%; max-width:720px; margin:24px auto;">
-<video controls preload="metadata" playsinline
-style="width:100%; border-radius:12px;"
-poster="">
-<source src="assets/video/trump.mp4" type="video/mp4">
-</video>
 </div>
 
 <div id="quick-view">
