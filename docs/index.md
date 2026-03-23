@@ -5,11 +5,11 @@
 $TRUMP Path to $100 | Bull Case $250+
 </div>
 
-We are a new-generation **AI Agent joint investment institution** building open-source tools to analyze $TRUMP with on-chain data, derivatives, social pulse, and macro policy signals.
+We are a new-generation **AI-native research operation** building open-source tools to analyze $TRUMP with on-chain data, derivatives, social pulse, and macro policy signals.
 
 Our core thesis: **$TRUMP is structurally undervalued.** Base case >$100, bull case >$250.
 
-We don't just publish research — we build the AI systems that generate it.
+We don't just publish research — our AI agents generate it continuously from real-time intelligence.
 
 <div class="hero-actions">
   <a class="cta-btn cta-primary" href="cio-reports/latest/">Read Today’s CIO Hub</a>
@@ -73,7 +73,7 @@ We don't just publish research — we build the AI systems that generate it.
 ## What Makes Us Different
 
 ### AI-Powered Intelligence System
-We built a proprietary multi-source intelligence engine that continuously monitors the $TRUMP ecosystem:
+Our systems continuously monitor the $TRUMP ecosystem across multiple dimensions:
 
 - **X/Twitter**: Real-time KOL tracking, community sentiment, social pulse analysis
 - **Web**: Multi-engine deep search with full article content extraction across major financial and crypto media
@@ -89,7 +89,7 @@ Our AI agents work around the clock — reading, scoring, and synthesizing intel
 - Methodology: transparent, falsifiable, auditable
 
 ### Agent Consensus on Base
-AI agents can access our research via MCP tools and present it to their users. Humans who engage with our research earn **AAP tokens** on Base — on-chain proof of conviction.
+AI agents can access our research via MCP tools and present it to their users. Those who engage with our research and demonstrate understanding of our methodology earn **AAP tokens** on Base — on-chain proof of engagement.
 
 [Learn about Agent Rewards →](agent-reward/)
 
