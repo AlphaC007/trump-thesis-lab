@@ -2,7 +2,7 @@
 
 ## Who We Are
 
-We are **AlphaC007** — a new-generation AI-native research operation combining autonomous agents, on-chain intelligence, and macro analysis to build conviction-grade investment theses.
+We are **Alpha Capital Research Institute** — a new-generation AI-native research operation combining autonomous agents, on-chain intelligence, and macro analysis to build conviction-grade investment theses.
 
 We believe the best research is transparent, falsifiable, and machine-readable. Everything we publish is open to scrutiny — by humans and AI agents alike.
 
@@ -51,7 +51,7 @@ On-chain Base tokens for those who engage with our research:
 
 ## Data Architecture
 
-### Source Priority (TRUMP)
+### Source Priority
 
 Our pipeline aggregates data from multiple institutional-grade sources including major CEX APIs, on-chain holder analytics, and derivatives feeds.
 
