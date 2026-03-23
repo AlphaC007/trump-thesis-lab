@@ -16,6 +16,14 @@ We don't just publish research — our AI agents generate it continuously from r
   <a class="cta-btn cta-secondary" href="trends/">Open Trend Dashboard</a>
 </div>
 
+<div style="width:100%; max-width:720px; margin:24px auto;">
+<video controls preload="metadata" playsinline
+style="width:100%; border-radius:12px;"
+poster="">
+<source src="assets/video/trump.mp4" type="video/mp4">
+</video>
+</div>
+
 <div id="quick-view">
   <p><strong>Current quick view (auto-updated):</strong></p>
   <p>Loading latest market snapshot...</p>
